@@ -1,6 +1,6 @@
 # ARCHITECTURE.md — MarocBR v2
 
-**Statut : VALIDÉ par ElMehdi le 13 novembre 2026 (version 2, révision 2).** Dépend de DECISIONS.md v2.
+**Statut : VALIDÉ par ElMehdi le 13 novembre 2026 (version 2, révision 3).** Mis à jour pour DECISIONS.md v2 révision 3 : décor par tuiles, plus de véhicules, navigation des bots, piles de butin, portes visibles. Dépend de DECISIONS.md v2 révision 3.
 Ce document décrit **comment le code est organisé**, pas le jeu. Si les deux se contredisent, DECISIONS.md gagne.
 
 Public : ElMehdi (décisions), Muse (rangement des fichiers), Gemini et ChatGPT (relecture), Claude (seul à écrire le code).
@@ -37,11 +37,11 @@ MarocBR/
     ├── util.js             (maths, hasard à graine, petites fonctions)
     ├── data/               armes.js  surfaces.js  butin.js  textes.js  profils.js
     ├── core/               etat.js  boucle.js  evenements.js  zone.js  match.js
-    ├── world/              collision.js  vision.js  butin.js  bruit.js
+    ├── world/              collision.js  vision.js  butin.js  bruit.js  navigation.js
     ├── entities/           combat.js  commandes.js
     ├── ai/                 perception.js  cerveau.js
     ├── input/              tactile.js  traduction.js
-    ├── render/             monde.js  hud.js  minimap.js  effets.js
+    ├── render/             monde.js  tuiles.js  hud.js  minimap.js  effets.js
     ├── audio/              audio.js
     ├── debug/              perf.js
     └── main.js             (démarrage : charge la carte, branche les modules)
@@ -57,7 +57,7 @@ Les modules sont rangés en couches. **Un module n'appelle que les couches en de
 |---|---|---|
 | 1. Données | `config`, `util`, `data/*`, `cartes/*` | rien (ce sont des données) |
 | 2. Cœur | `core/*` (état, boucle, événements, zone, match) | couche 1 |
-| 3. Monde | `world/*` (collision, vision, butin, bruit) | couches 1-2 |
+| 3. Monde | `world/*` (collision, vision, butin, bruit, navigation) | couches 1-2 |
 | 4. Entités | `entities/*` (combat, commandes) | couches 1-3 |
 | 5. Décideurs | `ai/*` (bots), `input/*` (joueur) | couches 1-4 ; **produisent des commandes** |
 | 6. Lecteurs | `render/*`, `audio/*`, `debug/*` | couches 1-5 en **lecture seule** |
@@ -79,19 +79,21 @@ Les modules sont rangés en couches. **Un module n'appelle que les couches en de
 | `core/etat.js` | L'objet d'état unique du match (section 5) et sa création | N'affiche rien |
 | `core/boucle.js` | Boucle à pas fixe (60 mises à jour/s), pause, plafond d'images | Aucune règle |
 | `core/evenements.js` | Petit bus d'événements (section 7) | |
-| `core/zone.js` | Chronologie de la zone (DECISIONS §2), cercle actuel/prochain, dégâts | Ne sait pas où est le joueur : elle donne « ce point est-il dans la zone ? » |
+| `core/zone.js` | Chronologie de la zone (DECISIONS §2), cercle actuel/prochain, dégâts en % des PV max (en continu, ils ignorent le gilet) | Ne sait pas où est le joueur : elle donne « ce point est-il dans la zone ? » |
 | `core/match.js` | États du match (attente, décompte, en cours, fini), rang, victoire, égalité | |
 | `world/collision.js` | Grille de collision, déplacements qui glissent le long des murs, balles contre les murs | |
 | `world/vision.js` | Ligne de vue, buissons (180 unités de contour à contour, fondu), fumée | |
-| `world/butin.js` | Placement du butin, ouverture des caisses et maisons, ramassage | |
+| `world/butin.js` | Placement du butin, ouverture des caisses et maisons, ramassage, **piles des éliminés** (tout le butin du mort, regroupé et réparti autour du corps) | Ne décide pas de la mort : reçoit l'événement `elimination` |
 | `world/bruit.js` | **Modèle unique du bruit** : qui émet quoi, qui entend quoi (section 8) | Ne joue aucun son |
+| `world/navigation.js` | **Grille de navigation grossière** (cellules d'environ 100 unités, ≈ 3 600 sur 6 000²), chemins calculés en plusieurs images, utilisée par les bots | Ne dirige aucun bot (c'est `ai/cerveau`) |
 | `entities/combat.js` | Armes en action : salves, balles, dégâts, gilet, soins, projectiles lancés | |
 | `entities/commandes.js` | Définit l'objet **Commande** (section 6) et l'applique à une entité | |
 | `ai/perception.js` | Ce qu'un bot voit et entend (via `vision` et `bruit`, mêmes règles que le joueur) | |
-| `ai/cerveau.js` | Hiérarchie de décisions, profils, réaction, états → produit des Commandes | N'agit jamais directement sur le monde |
+| `ai/cerveau.js` | Hiérarchie de décisions, profils, réaction, tir anticipé, mouvements de combat, soins à l'abri, niveaux de difficulté → produit des Commandes | N'agit jamais directement sur le monde |
 | `input/tactile.js` | Doigts, rôles, zones, annulation, interruptions (section 9) | Ne déplace rien |
 | `input/traduction.js` | Transforme les gestes en Commandes du joueur | |
-| `render/monde.js` | Dessin du monde, caméra, buissons, toits transparents | Lecture seule |
+| `render/monde.js` | Dessin du monde, caméra, buissons, toits transparents, portes (cadre, seuil, battant), piles de butin | Lecture seule |
+| `render/tuiles.js` | **Décor fixe par tuiles** : dessine, garde et libère les tuiles proches de la caméra (sol, murs, rues) | Lecture seule |
 | `render/hud.js` | Les 6 éléments permanents et les messages (DECISIONS §9) | Lecture seule |
 | `render/minimap.js` | Minimap sans ennemis | Lecture seule |
 | `render/effets.js` | Étincelles, particules (avec plafond) | |
@@ -151,18 +153,17 @@ Chaque fichier de carte contient **exactement les mêmes rubriques**. Si une rub
 | Rubrique | Contenu |
 |---|---|
 | Identité | nom, taille (largeur × hauteur), numéro de version du contrat |
-| Obstacles | liste de formes (rectangles, cercles) typées : mur plein, couvert bas, falaise |
+| Obstacles | liste de formes (rectangles, cercles) typées : mur plein, couvert bas (étals, **charrettes de souk**, caisses empilées), falaise |
 | Surfaces | zones typées selon le **tableau commun** `data/surfaces.js` : sable, pierre, eau, dune, intérieur, buisson |
-| Bâtiments | maisons (murs, porte, zone de toit), points de butin à l'intérieur |
+| Bâtiments | maisons (murs, **porte avec position, orientation, cadre et seuil**, zone de toit), points de butin à l'intérieur |
 | Points de butin | au sol, caisses, coffres, avec rareté de base |
-| Départs | points de départ des 16 participants, groupés si la carte l'exige |
-| Véhicules | positions des voiture(s) (obstacles solides) |
+| Départs | points de départ des 16 participants, **répartis** (au moins ~800 unités entre deux départs, réglable), groupés seulement si la carte l'exige |
 | Zone | centre et rayon de départ (demi-diagonale), **rayons de zone en % pour chaque phase** (par carte), règle de choix du centre suivant (**position aléatoire, toujours dans l'ancien cercle**) |
-| Repères | noms et positions des quartiers (pour la minimap et les messages) |
+| Repères | noms et positions des quartiers (pour la minimap et le nom affiché 1,5 s à l'entrée d'un quartier) |
 | Options | limite de vision indépendante des obstacles (oui/non et valeur) |
 | Remplissage | graine et règles de génération (maisons le long des rues, buissons), pour ne pas tout placer à la main |
 
-**Vérifications automatiques au chargement** : point de départ dans un mur, butin hors de la carte, maison sans porte, rubrique manquante, surface inconnue. Les erreurs s'affichent à l'écran (on n'a pas de console sur le téléphone).
+**Vérifications automatiques au chargement** : point de départ dans un mur, butin hors de la carte, maison sans porte, **porte bloquée (moins de 100 unités libres devant)**, rubrique manquante, surface inconnue. Les erreurs s'affichent à l'écran (on n'a pas de console sur le téléphone).
 
 **Règle d'or** : si une carte a besoin d'un comportement qui n'existe pas dans le moteur, on ajoute un **nouveau type générique** (dans `data/surfaces.js` ou dans une rubrique du contrat), **jamais** un cas particulier pour cette carte.
 
@@ -172,7 +173,9 @@ Chaque fichier de carte contient **exactement les mêmes rubriques**. Si une rub
 - **Grille spatiale** (cases d'environ 200 unités) pour la collision, la vision et la recherche de cibles : on ne teste que les voisins.
 - **Lignes de vue mises en cache** par paire, recalculées environ toutes les 0,2 s, et seulement pour les paires proches.
 - **Décisions des bots toutes les 0,2 s**, décalées d'un bot à l'autre (pas tous à la même image).
-- **Décor fixe** (sol, murs) dessiné une fois sur un canevas hors écran, puis recopié ; on ne redessine que ce qui bouge.
+- **Décor fixe par tuiles** (sol, murs, rues) : **jamais en un seul canevas** (36 M pixels × 4 octets ≈ **144 Mo** à 6 000², trop lourd pour un téléphone). Tuiles d'environ 512 × 512 unités ; seules celles proches de la caméra (visibles + 1 de marge, environ 12) sont gardées en mémoire, dessinées à la demande puis **libérées**. Ce qui bouge ou change (portes, butin, joueurs) n'est pas dans les tuiles. Budget mémoire des tuiles : de l'ordre de 7 à 30 Mo selon la résolution, **mesuré** par le scénario *traversée*.
+- **Navigation des bots** : grille grossière (cellules d'environ 100 unités, ≈ 3 600 sur 6 000²), chemins calculés en plusieurs images, jamais d'un coup.
+- **Piles de butin** : au plus 15 par match, une quinzaine d'objets chacune ; dessinées seulement quand elles sont à l'écran.
 - **Dessin seulement de ce qui est à l'écran** (plus une petite marge).
 - **Pas d'ombres floues** (`shadowBlur`) : coûteux sur mobile ; contour de texte à la place.
 - **Résolution** : tenir compte de la densité de pixels de l'écran, **plafonnée à 2**.
@@ -189,12 +192,12 @@ Chaque jalon est testé sur le Redmi avant le suivant. Format de retour d'ElMehd
 | **M0** Relevé et mesure | Relevé des valeurs de l'ancien code (**fait**, voir `M0_RELEVE.md`) ; outil de mesure `perf-debug.js` branché sur une copie de l'ancien jeu ; référence de performance | On sait combien d'images/s fait l'ancien jeu sur le Redmi (4 captures de résumé) | Muse met en place `legacy/` ; ElMehdi lance les scénarios et envoie les captures |
 | **M1** Squelette | Découpage en fichiers, `config`, état, boucle à pas fixe, caméra à 520, version affichée | Le jeu actuel fonctionne à l'identique, même FPS | Range les fichiers dans le dépôt |
 | **M2** Contrôles | `input/*`, commande unique de tir, annulation, interruptions, paysage verrouillé | Tap, maintien, glissement et annulation marchent ; aucun doigt fantôme ; testé par 5 personnes | Organise les 5 testeurs, note les ressentis |
-| **M3** Médina (base) | Carte au contrat, collision, vision, buissons, 16 entités sans IA | Marche à 30 FPS minimum avec 16 entités | Test de ralentissement du processeur |
+| **M3** Médina (base) | Carte 6 000² au contrat, **décor par tuiles**, collision, vision, buissons, portes simples, charrettes de souk, 16 entités sans IA, départs répartis | 30 FPS minimum avec 16 entités **et** scénario *traversée* réussi (pas de saccade ni de dépassement mémoire) | Test de ralentissement du processeur ; schéma des quartiers pour le remplissage |
 | **M4** Bruit et visibilité | `world/bruit`, `audio`, flèches, ennemis invisibles sur la minimap | On repère un ennemi caché au son ; scénario *stress* réussi | Test avec casque et en silencieux |
-| **M5** Bots | `ai/*`, 3 profils, mode démo, mesure du rythme de survie | 3 matchs complets, durée 10–11 min 30, aucune anomalie dans les contrôles | 3 matchs notés (durée, bugs) |
-| **M6** Armes et butin | 6 armes de base, butin, caisses, maisons, soins, ravitaillements | Un match complet jouable | Relecture Gemini du tableau |
-| **M7** Zone et fin | Chronologie DECISIONS §2, avertissements, fin de match, écran de résultat | Tout le rythme est vérifié en mode accéléré ×4 puis en normal | Teste les cas limites (égalité) |
-| **M8** Finition Médina | HUD épuré final, textes darija, retrait des mentions, version installable | **ElMehdi valide la Médina** | Vérifie 3 formats d'écran |
+| **M5** Bots | `world/navigation`, `ai/*`, 3 profils, renforcement (tir anticipé, mouvements de combat, soins, écoute), niveaux de difficulté, mode démo, mesure du rythme de survie | 3 matchs complets, durée 10–11 min 30, aucune anomalie dans les contrôles ; **taux de victoire du joueur mesuré** (objectif : ~1 sur 4 en Normal, ~1 sur 10 en Difficile, sur assez de matchs, nombre fixé avec ElMehdi) | 3 matchs notés (durée, bugs) |
+| **M6** Armes et butin | 6 armes de base, butin, caisses, maisons, soins, ravitaillements, **piles des éliminés** | Un match complet jouable ; chaque mort laisse sa pile complète | Relecture Gemini du tableau |
+| **M7** Zone et fin | Chronologie DECISIONS §2, **dégâts en % des PV max (en continu)**, avertissements, fin de match, écran de résultat | Tout le rythme est vérifié en mode accéléré ×4 puis en normal | Teste les cas limites (égalité) |
+| **M8** Finition Médina | HUD épuré final, textes darija, retrait des mentions, **portes au bon contraste (testé au soleil)**, version installable | **ElMehdi valide la Médina** | Vérifie 3 formats d'écran |
 | **M9+** Cartes 2 et 3, armes en plus | Seulement après M8 | Même contrat, même moteur | |
 
 Le jalon M8 est la porte d'entrée vers les cartes 2 et 3. Pas avant.
@@ -202,8 +205,8 @@ Le jalon M8 est la porte d'entrée vers les cartes 2 et 3. Pas avant.
 ## 13. Tests
 
 - **Mode démo** : les 16 participants sont des bots, graine fixe, vitesse de simulation accélérée possible. Sert à mesurer le rythme de survie, la durée, la performance.
-- **Contrôles automatiques** (affichés à l'écran en mode debug) : aucun bot plus rapide que sa vitesse maximale ; chaque perte de vie a une cause ; chaque élimination à portée d'écoute produit un son ou une ligne dans le fil des éliminations ; zone toujours incluse dans la précédente.
-- **Trois scénarios de performance**, répétés à chaque jalon : *stress*, *match complet*, *fin de match* ; plus le test de durée (DECISIONS §10). Seuils : moyenne ≥ 30, pire ≥ 24 images/s, aucune image à plus de 100 ms plus de quelques fois par minute, cible de 20 ms ou moins par image.
+- **Contrôles automatiques** (affichés à l'écran en mode debug) : aucun bot plus rapide que sa vitesse maximale ; chaque perte de vie a une cause ; chaque élimination à portée d'écoute produit un son ou une ligne dans le fil des éliminations ; zone toujours incluse dans la précédente ; **chaque élimination crée une pile contenant tout le butin du mort** (rien ne disparaît) ; **aucune porte bloquée**.
+- **Trois scénarios de performance**, répétés à chaque jalon : *stress*, *match complet*, *fin de match* ; plus le test de durée et, pour la Médina de 6 000², le scénario *traversée* (coin à coin en diagonale : mémoire et chargement des tuiles) (DECISIONS §10). Seuils : moyenne ≥ 30, pire ≥ 24 images/s, aucune image à plus de 100 ms plus de quelques fois par minute, cible de 20 ms ou moins par image.
 - **Format de rapport** : version, scénario, FPS moyen, pire image, ressenti, capture d'écran prise par ElMehdi sur son Redmi. À noter dans TACHES.md.
 
 ## 14. Règles de travail
@@ -222,4 +225,4 @@ Le jalon M8 est la porte d'entrée vers les cartes 2 et 3. Pas avant.
 - **Version Unity** : les données (armes, surfaces, cartes, textes, profils de bots) et les règles (zone, bruit, hiérarchie des bots) se retraduisent presque telles quelles en C#.
 
 ---
-*ARCHITECTURE.md v2 (révision 2) — validé par ElMehdi le 2026-11-13.*
+*ARCHITECTURE.md v2 (révision 3) — validé par ElMehdi le 2026-11-13.*
