@@ -11,6 +11,19 @@
 ## M0 (2026-11-13) — relevé terminé, mesures à faire
 - [x] Claude: relevé de l'ancien code (M0_RELEVE.md) + outil perf-debug.js ; DECISIONS.md v2 et ARCHITECTURE.md v2 validés par ElMehdi le 2026-11-13
 
+## Révision 4 (2026-11-14) — validée par ElMehdi
+- [x] DECISIONS.md v2 révision 4 + ARCHITECTURE.md v2 révision 4 validés par ElMehdi le 2026-11-14 (message 47, Claude message 48)
+- [x] Auto-visée : 40 % de la portée (pistolet 180, mitraillette 152, fusil d'assaut 260, pompe 104, sniper 440, arbalète 280) ; mêlée non concernée
+- [x] Butin : ~250 emplacements conservés (≈ 11 par participant), pas ~360
+- [x] Buissons : ne bloquent ni la vue ni les dégâts
+- [x] Dégâts +25 % sur le tableau v2 (pistolet 23, mitraillette 5×9, fusil d'assaut 3×18, pompe 6×10, sniper 75, arbalète 38)
+- [x] Bots 22, Difficile par défaut, jamais de bot immobile sans raison, ligne de vue obligatoire, portes avec encoche + cadre turquoise + seuil lumineux
+- [x] Point 20 (§12) tranché le 2026-11-15 : buissons — la discrétion reste (invisible au-delà de 180 unités pour celui qui est dedans) ; les buissons ne deviennent pas purement décoratifs
+- [ ] Sélecteur de niveau dans le lobby (Difficile présélectionné) — Claude l'a considéré comme couvert par « validé tel quel », à confirmer par ElMehdi
+- [ ] Toujours ouverts : héros équilibrés ou non ; lien public du jeu ; valeurs d'armes (relecture Gemini en attente)
+- [ ] M0 : toujours les 4 scénarios en paysage avec les panneaux RÉSUMÉ (compteur « bots immobiles » disponible dans perf-debug.js)
+- [ ] Ensuite : jalon M1 — découpage en fichiers, caméra à 520 et décor par tuiles
+
 ## Révision 3 (2026-11-13) — validée par ElMehdi
 - [x] DECISIONS.md v2 révision 3 + ARCHITECTURE.md v2 révision 3 validés par ElMehdi le 2026-11-13
 - [x] Voitures : option A — retirées de la Médina, remplacées par des charrettes de souk

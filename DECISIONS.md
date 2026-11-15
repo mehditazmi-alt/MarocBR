@@ -1,14 +1,28 @@
-# DECISIONS.md — MarocBR (source de vérité) — VERSION 2, RÉVISION 3
+# DECISIONS.md — MarocBR (source de vérité) — VERSION 2, RÉVISION 4
 
-**Statut : VALIDÉ par ElMehdi le 13 novembre 2026 (version 2, révision 3). Source de vérité du projet.**
-La révision 3 remplace la révision 2 (validée le même jour). Les marques **[RÉV. 3]** indiquent ce qui a changé par rapport à la révision 2 ; elles sont conservées pour l'historique.
+**Statut : VALIDÉ par ElMehdi le 14 novembre 2026 (version 2, révision 4) ; point 20 tranché le 15 novembre 2026. Source de vérité du projet.**
+La révision 4 remplace la révision 3 (validée le 13 novembre 2026). Le point 20 de la section 12 (buissons : discrétion de l'occupant), dernier point ouvert de cette révision, a été tranché par ElMehdi le 15 novembre 2026 : la règle de discrétion de la rév. 2 est conservée. Les marques [RÉV. 3] et [RÉV. 4] indiquent ce qui a changé ; elles sont conservées pour l'historique.
 Règle : on ne modifie pas une règle validée sans l'accord d'ElMehdi. Ce qui n'est pas écrit ici n'est pas décidé.
 
-Légende : **[VALIDÉ]** décidé par ElMehdi · **[ACCEPTÉ]** proposé par Claude, relu par ChatGPT, retenu · **[À RÉGLER]** valeur de départ, à ajuster par des tests sur le Redmi · **[À CONFIRMER]** point ouvert, voir section 12 · **[RÉV. 3 — NOUVEAU]** ajouté dans la révision 3 · **[RÉV. 3 — MODIFIÉ]** change une décision de la révision 2 (l'ancienne valeur est rappelée).
+Légende : **[VALIDÉ]** décidé par ElMehdi · **[ACCEPTÉ]** proposé par Claude, relu par ChatGPT, retenu · **[À RÉGLER]** valeur de départ, à ajuster par des tests sur le Redmi · **[À CONFIRMER]** point ouvert, voir section 12 · **[RÉV. 3 — NOUVEAU]** ajouté dans la révision 3 · **[RÉV. 3 — MODIFIÉ]** change une décision de la révision 2 (l'ancienne valeur est rappelée) · **[RÉV. 4 — NOUVEAU / MODIFIÉ / PRÉCISION]** même chose pour la révision 4, **validée le 14 novembre 2026**.
 
 ---
 
-## 0. Révision 3 : ce qui change
+## 0. Révision 4 : ce qui a changé (validé le 14 novembre 2026)
+
+| # | Sujet | Avant (rév. 3 validée) | Maintenant (rév. 4) | Statut |
+|---|---|---|---|---|
+| 1 | Nombre de bots | 15 bots, 16 participants | **22 bots, 23 participants**, niveau **Difficile** par défaut, sélecteur de niveau dans le lobby (§1, §5) | **MODIFIÉ, VALIDÉ** |
+| 2 | Mouvement des bots | décisions, profils, renforcement | **chemins par les portes, détection de blocage, jamais immobile sans raison** (§5) | NOUVEAU, **VALIDÉ** |
+| 3 | Portes | cadre, seuil, battant, repère | + **le toit s'interrompt à la porte** (§7) | PRÉCISION, **VALIDÉ** |
+| 4 | Dégâts des armes | tableau de la rév. 3 | **+25 %** sur toutes les armes, sur le tableau v2 (§8) | **MODIFIÉ, VALIDÉ** |
+| 5 | Auto-visée | verrouillage jusqu'à 100 % de la portée de l'arme | **40 %** de la portée (60 % avait été proposé) : 180 · 152 · 260 · 104 · 440 · 280 (§3, §8) | **MODIFIÉ, VALIDÉ** |
+| 6 | Ligne de vue | murs et couverts bloquent les balles ; ennemis visibles en ligne de vue | **aucun dégât sans ligne dégagée** (balles, mêlée, explosions), un seul calcul, balles par segment ; **les buissons ne bloquent ni la vue ni les dégâts** (§8) | NOUVEAU, **VALIDÉ** |
+| 7 | Butin | ~250 emplacements sur la Médina | **~250 conservés** (≈ 11 par participant), pas ~360 (§8) | **VALIDÉ** |
+
+ARCHITECTURE.md a été mis à jour en révision 4 (validée) : 23 participants, ligne dégagée unique, balles par segment, navigation par les portes, tests. Les constats sur la v1 (captures et code) sont dans §5, §7 et §8 ; **la v1 reste figée** (référence de mesure). Tout le reste est inchangé.
+
+## 0b. Révision 3 : ce qui a changé (validé le 13 novembre 2026)
 
 | # | Sujet | Avant (rév. 2 validée) | Maintenant (rév. 3) | Statut |
 |---|---|---|---|---|
@@ -26,7 +40,7 @@ Tout le reste est inchangé. **ARCHITECTURE.md a été mis à jour en conséquen
 ## 1. Le jeu
 
 - Jeu web 2D vu du dessus (HTML5 / JavaScript / Canvas), **hors ligne**. Version Unity plus tard, quand ElMehdi aura un PC. Multijoueur en ligne en Phase 3. **[VALIDÉ]**
-- **16 participants** : 1 humain (ElMehdi) + **15 bots ennemis**. Brief d'ElMehdi : 15 joueurs ennemis. (v1 : 9 bots.) **[VALIDÉ]**
+- **23 participants** : 1 humain (ElMehdi) + **22 bots ennemis**, niveau **Difficile** par défaut. **[RÉV. 4 — MODIFIÉ : avant 16 participants (15 bots) ; brief initial : 15 joueurs ennemis ; v1 : 9 bots]**
 - Style de jeu inspiré de Brawl Stars (visée automatique en maintenant, tir au relâchement, sélection d'arme simple et rapide), **sans reprendre aucun nom, logo ni icône** d'un autre jeu. **[VALIDÉ]**
 - Orientation : **paysage uniquement, verrouillé**. En portrait, le jeu se met en pause et demande de tourner le téléphone. **[VALIDÉ]**
 - On démarre les mains nues (poings). Le butin est au sol, dans des caisses ou dans des maisons ouvertes. Un participant éliminé laisse tomber **tout son butin** (voir §8). **[RÉV. 3 — MODIFIÉ : avant « son arme »]**
@@ -55,7 +69,7 @@ Tout le reste est inchangé. **ARCHITECTURE.md a été mis à jour en conséquen
 - **Les dégâts de zone ignorent le gilet** (il ne protège que des balles).
 - **À 11:00, le cercle vaut 0** : tout le monde est hors zone et meurt en environ 17 s (6 % par seconde). Fin maximale : environ **11 min 20** sans soin, un peu plus si quelqu'un se soigne. La durée visée reste **10 à 11 min 30**. **[RÉV. 3 — MODIFIÉ : avant ~10 s et fin ~11 min 10]**
 - **Égalité** (deux morts à la même image) : gagne celui qui avait le plus de PV juste avant ; si égalité, tirage au sort.
-- Quand le joueur meurt : écran « Éliminé », rang (#N sur 16), nombre d'éliminations, boutons Rejouer / Quitter.
+- Quand le joueur meurt : écran « Éliminé », rang (#N sur 23), nombre d'éliminations, boutons Rejouer / Quitter.
 
 ## 3. Contrôles **[ACCEPTÉ, à valider par des tests]**
 
@@ -74,6 +88,7 @@ Tout le reste est inchangé. **ARCHITECTURE.md a été mis à jour en conséquen
 - **3 emplacements d'armes** (petites icônes rondes). Un tap change d'arme (0,25 s). Les poings sont toujours disponibles et ne prennent pas d'emplacement. (v1 : 2 armes.)
 - **Chaque relâchement tire une salve courte** (comme les attaques de Brawl Stars), pas de tir continu. **[À CONFIRMER par test]** pour les armes automatiques.
 - **Choix de la cible** : seulement les ennemis **visibles et à portée** (jamais à travers un mur). Priorité : le plus proche de la ligne de visée, puis le plus proche en distance. La cible est gardée environ 0,3 s.
+- **Distance d'auto-visée** **[RÉV. 4 — MODIFIÉ, VALIDÉ : avant, le verrouillage portait jusqu'à 100 % de la portée de l'arme (330 pour les poings en v1) ; 60 % avait été proposé, ElMehdi a choisi 40 %]** : le verrouillage automatique ne choisit que des cibles situées à moins de **40 % de la portée de l'arme** (pistolet 180, mitraillette 152, fusil d'assaut 260, pompe 104, sniper 440, arbalète 280). Au-delà, on vise à la main (tenir + glisser) ; un tap sans cible à portée de verrouillage tire dans la direction du regard. La portée réelle des projectiles ne change pas. Les armes de mêlée (poings, poignard) ne sont pas concernées : leur cible est déjà « au contact ».
 - Aimant de visée selon l'arme : voir section 8.
 - Options : mode gaucher, légère vibration quand on touche une cible.
 
@@ -84,22 +99,24 @@ Tout le reste est inchangé. **ARCHITECTURE.md a été mis à jour en conséquen
 - **L'interface se mesure séparément**, en pourcentage de la hauteur de l'écran.
 - **Vitesse du joueur : à confirmer, mesurée au jalon M0 puis réglée par des tests de sensation (jalon M2).** Décision d'ElMehdi du 13 novembre 2026. Aucune valeur n'est décidée (131 demandée par ElMehdi, ~190 suggérée par Claude). Relevé de l'ancien code : 212 unités du monde par seconde (voir `M0_RELEVE.md`).
 
-## 5. Les 15 bots **[ACCEPTÉ ; RÉV. 3 : renforcement]**
+## 5. Les 22 bots **[ACCEPTÉ ; RÉV. 3 : renforcement ; RÉV. 4 : 22 bots, Difficile]**
 
-- **Profils** (15 bots) : 4 **Fonceurs**, 6 **Prudents**, 5 **Tireurs**. La personnalité se voit dans les **décisions**, pas seulement dans la précision.
+- **Profils** (22 bots) : 6 **Fonceurs**, 9 **Prudents**, 7 **Tireurs** (mêmes proportions qu'avec 15 bots : 4 / 6 / 5). La personnalité se voit dans les **décisions**, pas seulement dans la précision. **[RÉV. 4 — MODIFIÉ]**
   - **Fonceur** : chemin le plus court, traverse les espaces ouverts, poursuit, soigne peu.
   - **Prudent** : longe les murs, se soigne avant de ramasser, refuse un combat à armement inégal, se replie sous 40 % de vie.
   - **Tireur** : cherche les lieux à longue vue, recule pour garder la distance, utilise les couverts et le fusil de précision.
 - **Pourquoi les bots de la v1 sont « noobs » [RÉV. 3 — NOUVEAU, relevé du code v1]** : ils décident toutes les 0,5 à 1,1 s ; ils visent là où la cible EST, sans anticiper (leurs balles ratent dès qu'on bouge) ; ils n'esquivent pas, ne se mettent pas à couvert, ne fuient pas ; ils errent au hasard quand ils ne voient personne ; ils ne cherchent du butin que dans 700 unités, et une fois sur deux seulement s'ils ont déjà une arme ; ils n'utilisent jamais le thé ; ils n'entendent rien ; ils se comportent tous de la même façon. **Les 3 profils seuls ne suffisent donc pas** : ils apportent la variété, la force vient des points suivants.
 - **Renforcement des bots [RÉV. 3 — NOUVEAU]** : (a) décisions toutes les 0,2 s ; (b) **tir anticipé** : ils visent où la cible sera, avec une qualité réglée par leur précision ; (c) **mouvements de combat** : se déplacer sur le côté sous le feu (Fonceur : zigzag court en avançant ; Prudent : recul vers un couvert ; Tireur : garde la distance) ; (d) **soins à l'abri** : bandage, thé, trousse ; (e) **butin d'abord** : tous cherchent une arme dès le début (objectif : au moins une arme avant 1:00), visitent maisons et caisses, et ramassent les **piles des éliminés** (§8) ; (f) **écoute** des bruits, mêmes règles que le joueur ; (g) **zone** : ils partent à l'avance dès l'avertissement de 30 s ; (h) **lignes de vue** : ils ne visent que ce qu'ils voient.
+- **Mouvement : jamais de bot immobile sans raison** **[RÉV. 4 — NOUVEAU]** : sur les captures du test de la v1, entre 0:25 et 1:03 de match, le nombre de survivants (7), les éliminations (1) et la santé du joueur (82) n'ont pas changé, et les points rouges de la minimap semblent rester aux mêmes endroits : les bots n'ont pas bougé. Causes trouvées dans le code v1 : (a) **aucun calcul de chemin** : un bot sans arme vise le butin le plus proche (les 8 maisons en contiennent), marche en ligne droite et reste collé au mur, car il ne sait pas passer par la porte ; (b) un objectif choisi dans la rivière annule son déplacement jusqu'à la décision suivante ; (c) ils ne combattent qu'à moins de 430 unités et, sans arme, doivent arriver à moins de 60. **Règles v2** : chaque bot suit un chemin de la grille de navigation et **passe par les portes** ; **détection de blocage** (un bot qui veut avancer et n'a pas progressé de plus de 20 unités en 2 s choisit un autre chemin ou un autre objectif) ; **un bot n'est jamais immobile plus de 5 s sans raison enregistrée** (soin, embuscade, écoute, duel) ; contrôle automatique en mode démo : le nombre de bots immobiles sans raison doit rester à **0**. *Ces causes sont lues dans le code, pas encore reproduites sur le téléphone.*
 - **Niveaux de difficulté** : Facile / Normal / Difficile changent la précision, le temps de réaction et la qualité du tir anticipé, **jamais les règles ni la vision** (les bots ne trichent pas, et leur précision maximale reste inférieure au verrouillage automatique du joueur). **Objectif [VALIDÉ]** : au niveau Normal, un joueur moyen gagne environ **1 match sur 4** ; au niveau Difficile, environ **1 sur 10**. Les réglages de précision et de réaction sont ajustés par la mesure. Mesuré en mode démo (bots entre eux) puis par les matchs d'ElMehdi.
+- **Niveau par défaut : Difficile** **[RÉV. 4 — NOUVEAU]** (demande d'ElMehdi, avec 22 bots). Avec l'objectif validé, cela signifie qu'un joueur moyen gagne environ 1 match sur 10 à ce niveau. **[VALIDÉ]** : un sélecteur de niveau dans le lobby (3 boutons, Difficile présélectionné), pour que d'autres testeurs puissent jouer en Normal ou en Facile.
 - **Paramètres par bot** : précision (35 à 65 %), temps de réaction (0,4 à 0,8 s), seuil de fuite, portée d'écoute. Trois niveaux de difficulté (Facile / Normal / Difficile) modifient précision et réaction. **[À RÉGLER]**
 - **Hiérarchie de décisions**, de la plus forte à la plus faible : (1) survivre à la zone, (2) vie critique : fuir et soigner, (3) combat, (4) enquêter sur un bruit, (5) butin, (6) se placer pour la prochaine zone. Un événement prioritaire interrompt toujours une activité moins prioritaire. Un état dure au moins 0,8 s, sauf urgence (dégâts reçus).
 - **Les bots ne trichent pas** : ils voient et entendent avec les mêmes règles que le joueur. Ils vont vers l'endroit d'où vient un bruit, pas vers la position exacte de l'ennemi. Ils donnent les mêmes commandes que le joueur.
-- **Performance** : les 15 bots sont **tous simulés pleinement** au départ, avec décisions toutes les 0,2 s (pas à chaque image). **Plan B** seulement si le test de performance échoue : simulation simplifiée des bots lointains, sans téléportation (même position, même vie, même état), passage progressif à la simulation complète avec deux seuils (entrée à 1 500, sortie à 1 800 unités). Les duels entre bots lointains durent plusieurs secondes et font du bruit.
-- **Rythme de survie** (objectif, **jamais une règle**, aucune élimination n'est forcée) : environ 14 vivants à 2:00, 11 à 4:00, 8 à 6:00, 4 à 8:00, 2 ou moins à 10:00. Mesuré sur beaucoup de parties en **mode démo** (bots seuls, graine aléatoire fixe pour rejouer le même match). **[RÉV. 3]** Sur la Médina de 6 000², les joueurs sont plus espacés (≈ 750 unités entre voisins les plus proches, contre ≈ 450 en v1) : ces chiffres sont à **re-mesurer** avant d'être gardés.
+- **Performance** : les 22 bots sont **tous simulés pleinement** (le plan B est plus probable qu'avec 15 : à mesurer) au départ, avec décisions toutes les 0,2 s (pas à chaque image). **Plan B** seulement si le test de performance échoue : simulation simplifiée des bots lointains, sans téléportation (même position, même vie, même état), passage progressif à la simulation complète avec deux seuils (entrée à 1 500, sortie à 1 800 unités). Les duels entre bots lointains durent plusieurs secondes et font du bruit.
+- **Rythme de survie** (objectif, **jamais une règle**, aucune élimination n'est forcée) : environ 20 vivants (sur 23) à 2:00, 16 à 4:00, 12 à 6:00, 6 à 8:00, 3 ou moins à 10:00 **[RÉV. 4 : recalculé proportionnellement ; avant 14 · 11 · 8 · 4 · 2 sur 16]**. Mesuré sur beaucoup de parties en **mode démo** (bots seuls, graine aléatoire fixe pour rejouer le même match). **[RÉV. 3]** Sur la Médina de 6 000², les joueurs sont plus espacés (≈ 625 unités entre voisins les plus proches avec 23 participants, contre ≈ 450 en v1) : ces chiffres sont à **re-mesurer** avant d'être gardés.
 - Contrôles automatiques en mode démo : aucun bot plus rapide que sa vitesse maximale ; chaque perte de vie a une cause enregistrée ; chaque élimination dans la zone d'écoute produit un son ou une ligne dans le fil des éliminations.
-- Prénoms de bots marocains : liste à demander à Gemini.
+- Prénoms de bots marocains : 22 prénoms à demander à Gemini.
 
 ## 6. Visibilité et bruits de pas **[VALIDÉ + ACCEPTÉ]**
 
@@ -125,6 +142,7 @@ Trois systèmes séparés : (1) la **minimap** (aucun ennemi), (2) la **vision r
 - **Flèches de bruit à l'écran : actives par défaut, désactivables dans les réglages.** Petites flèches discrètes au bord de l'écran dans la direction du bruit. Légère vibration pour les bruits très proches. **[VALIDÉ]**
 - **Coups de feu** audibles (portée 1 100) avec une flèche brève. **[À CONFIRMER par test]**
 - **Buissons** : un joueur dans un buisson est invisible, sauf à moins de **180 unités mesurées de contour à contour** (pas de centre à centre). Entrée et sortie avec un fondu de 0,2 s. On l'entend quand même.
+- **Buissons : jamais un obstacle** **[RÉV. 4 — PRÉCISION, décision d'ElMehdi du 14 novembre]** : un buisson ne bloque **ni la vue ni les dégâts**. Un buisson entre deux joueurs ne cache personne, et on peut toucher un joueur qui s'y trouve en tirant à la main. La discrétion décrite ci-dessus ne concerne que celui qui est **dedans** (pas de verrouillage automatique sur lui au-delà de 180 unités) et n'empêche jamais les dégâts. **[VALIDÉ le 15 novembre 2026, §12 point 20]**
 - **Option par carte** : une limite de vision indépendante des obstacles, à comparer à la vision par ligne de vue (surtout sur la Kasbah des Sables).
 - **Sons générés par le navigateur** (Web Audio), pas de fichiers sous licence. L'audio ne démarre qu'après le premier appui sur « Jouer ».
 
@@ -132,7 +150,7 @@ Trois systèmes séparés : (1) la **minimap** (aucun ennemi), (2) la **vision r
 
 **Règle : les cartes 2 et 3 ne commencent qu'après que la Médina a passé le test de performance ET que ElMehdi l'a validée en jeu.**
 
-**Obstacles (4 types)** : mur plein (bloque déplacements et balles) · couvert bas (étals, **charrettes de souk**, caisses empilées : bloque déplacements et balles, contournable) · buisson (voir section 6) · eau (ralentit de 25 %, bruit plus fort).
+**Obstacles (4 types)** : mur plein (bloque déplacements et balles) · couvert bas (étals, **charrettes de souk**, caisses empilées, **troncs d'arbres et de palmiers**, rochers : bloque déplacements et balles, contournable) · buisson (voir section 6) · eau (ralentit de 25 %, bruit plus fort).
 
 ### Carte 1 — Médina d'Ambre (carte de référence)
 - **Taille : 6 000 × 6 000** : le double des côtés de la v1 (3 000 × 3 000), soit 36 millions d'unités², **4 fois la surface de la v1** et **2,8 fois** celle de la carte de 3 600² validée en rév. 2. **Confirmé par ElMehdi.** **[RÉV. 3 — MODIFIÉ : avant « 3 600 × 3 600, agrandie à 4 800 × 4 800 seulement si trop serrée »]** La taille reste un **paramètre** de la carte : si les tests de performance ou de rythme l'exigent, on la réduit, mais **seulement avec l'accord d'ElMehdi**.
@@ -140,10 +158,10 @@ Trois systèmes séparés : (1) la **minimap** (aucun ennemi), (2) la **vision r
 - **Conséquences du 6 000² [RÉV. 3 — CALCULÉES, à valider avec la révision]** :
   - **Zone** : rayon de départ = demi-diagonale ≈ **4 243** ; rayons après chaque phase, avec les mêmes pourcentages : ≈ **2 885 · 1 867 · 1 103 · 552 · 170**. Le bord du cercle avance à environ 90 · 68 · 51 · 37 · 25 unités/s pendant les rétrécissements (puis ≈ 4 pour le cercle final), **toujours très en dessous de la vitesse du joueur** (212 en v1). Aucune règle de zone à changer, seulement les rayons en unités.
   - **Traversée à pied** (bord à bord / en diagonale) : à 131 unités/s ≈ 46 s / 65 s ; à 190 ≈ 32 s / 45 s ; à 212 ≈ 28 s / 40 s. La vitesse reste « à confirmer » (§4).
-  - **Densité de joueurs** : 16 participants sur 36 M unités² = 0,44 par million d'unités² (v1 : 1,1 ; Médina 3 600² : 1,2). Distance moyenne au voisin le plus proche avec des départs tirés au hasard : ≈ 750 unités (v1 ≈ 450). Départs **répartis** (au moins ~800 unités entre deux départs, valeur **[À RÉGLER]**) pour éviter un début vide. **[VALIDÉ]**
+  - **Densité de joueurs** : 23 participants sur 36 M unités² = 0,64 par million d'unités² (v1 : 1,1 ; Médina 3 600² avec 16 participants : 1,2). Distance moyenne au voisin le plus proche avec des départs tirés au hasard : ≈ 625 unités (v1 ≈ 450). Départs **répartis** (au moins ~800 unités entre deux départs, valeur **[À RÉGLER]**) pour éviter un début vide. **[VALIDÉ]**
   - **Ce qu'on voit** : la caméra (520 de haut) montre ≈ 1,3 % de la carte (v1 ≈ 3,8 %). Sur la minimap (~20 % de la hauteur), 1 pixel ≈ 75 unités : seuls le cercle de zone et les repères de quartiers restent lisibles. **Le nom du quartier s'affiche pendant 1,5 s quand on y entre.** **[VALIDÉ]**
   - **Mémoire** : un décor fixe dessiné d'un seul bloc ferait ≈ **144 Mo** à 1 pixel par unité (36 M pixels × 4 octets), trop lourd pour un téléphone. **Le décor fixe sera dessiné par tuiles** (par exemple 512 × 512, seulement celles proches de la caméra). ARCHITECTURE.md §11 a été mis à jour en conséquence. **[VALIDÉ]**
-  - **Images par seconde** : le coût dépend de ce qui est près de la caméra et des 16 personnages, pas de la surface totale, **à condition** d'avoir la grille spatiale, le dessin limité à l'écran et les tuiles. On le **vérifie** par un scénario *traversée* (§10), pas par une promesse.
+  - **Images par seconde** : le coût dépend de ce qui est près de la caméra et des 23 personnages, pas de la surface totale, **à condition** d'avoir la grille spatiale, le dessin limité à l'écran et les tuiles. On le **vérifie** par un scénario *traversée* (§10), pas par une promesse.
   - **Bots** : navigation sur une grille grossière (cellules d'environ 100 unités, ≈ 3 600 cellules), calculée en plusieurs images.
   - **Contenu** : ≈ 2,8 fois plus de maisons et de butin à placer. Le remplissage est généré à partir d'une graine, avec 3 à 4 plans de maison, et les quartiers fixent la densité (dense au souk, rare dans les dunes). Une maison tous les ~900 unités en moyenne : **risque de carte vide à surveiller** (alerte de ChatGPT du 2026-11-12).
 - Quartiers : **Souk central** (ruelles étroites, combat rapproché) · **Kasbah** au nord (fort aux murs épais, une entrée principale) · **Quartier des tanneurs** à l'ouest (grands bacs colorés comme obstacles) · **Palmeraie et oasis** à l'est (buissons, embuscades) · **Dunes et ruines** au sud (terrain ouvert, longue distance) · **Place des Conteurs** (carrefour dangereux).
@@ -167,6 +185,7 @@ Trois systèmes séparés : (1) la **minimap** (aucun ennemi), (2) la **vision r
 ### Maisons : portes visibles **[RÉV. 3 — NOUVEAU]**
 Retour d'ElMehdi : on ne voit pas où est la porte. Dans la v1, la porte est un trou de 64 unités dans le mur, de la couleur du sol.
 - **Cadre** : deux piliers de part et d'autre de l'ouverture, en **bleu turquoise (zellige)** ou blanc chaux selon le quartier, nettement plus clairs que le mur.
+- **Le toit s'interrompt à la porte** **[RÉV. 4 — PRÉCISION]** : vu de l'extérieur, le toit ne recouvre jamais l'ouverture ni son cadre (encoche dans le toit) ; le cadre, le seuil et le battant sont dessinés **au-dessus** du toit. *Constat sur la v1 : le toit opaque recouvre toute la maison, porte comprise ; la porte n'apparaît que de l'intérieur (trou de 64 unités de la couleur du sol).*
 - **Seuil** : une dalle claire de 64 × 24 unités devant la porte, à l'extérieur, avec **une arche en fer à cheval** dessinée au sol (la forme se reconnaît même sans la couleur).
 - **Battant** : fermé, c'est un battant de bois de couleur vive avec une poignée ; ouvert (quelqu'un à moins de ~90 unités), il pivote à angle droit et **l'ouverture se voit bien**. Il se referme quand plus personne n'est à moins de ~130 unités pendant 2 s. **C'est cosmétique** : l'ouverture reste toujours franchissable, la vue et les balles passent par l'ouverture.
 - **Repère de proximité** : à moins de 300 unités et avec une ligne de vue, le seuil brille doucement (pulsation de 0,8 s).
@@ -185,22 +204,29 @@ Retour d'ElMehdi : les voitures de la v1 (3 obstacles décoratifs de 104 × 48 u
 
 Style cartoon, sans sang (étincelles à l'impact). **Ce tableau n'a pas encore été relu pour l'équilibrage : Gemini le relit** (équilibrage seulement, sans code). ChatGPT a refusé cette relecture.
 
-| Arme | Dégâts | Portée | Cadence | Munitions | Aimant | Particularité |
-|---|---|---|---|---|---|---|
-| Poings | 9 | 80 | 0,35 s | aucune | cible la plus proche (< 80) | tout automatique |
-| Poignard (khanjar) | 22 | 70 | 0,5 s | aucune | idem | silencieux |
-| Pistolet | 18 | 450 | 0,5 s | légères | ±20° | 1 tir |
-| Mitraillette (SMG) | 5 × 7 | 380 | 0,7 s | légères | ±20° | rafale de 5 |
-| Fusil d'assaut | 3 × 14 | 650 | 0,8 s | moyennes | ±15° | rafale de 3 |
-| Fusil à pompe | 6 × 8 | 260 | 0,9 s | cartouches | ±35° | éventail de 40° |
-| Fusil de précision (sniper) | 60 | 1 100 | 1,6 s | lourdes | ±8° | perforant (traverse les cibles) |
-| Arbalète | 30 | 700 | 0,9 s | flèches | à définir | silencieuse |
+| Arme | Dégâts **[RÉV. 4 : +25 %]** | Portée | Verrouillage auto (40 % de la portée) | Cadence | Munitions | Aimant | Particularité |
+|---|---|---|---|---|---|---|---|
+| Poings | 11 (avant 9) | 80 | au contact (< 80) | 0,35 s | aucune | cible la plus proche (< 80) | tout automatique |
+| Poignard (khanjar) | 28 (avant 22) | 70 | au contact (< 70) | 0,5 s | aucune | idem | silencieux |
+| Pistolet | 23 (avant 18) | 450 | 180 | 0,5 s | légères | ±20° | 1 tir |
+| Mitraillette (SMG) | 5 × 9 (avant 5 × 7) | 380 | 152 | 0,7 s | légères | ±20° | rafale de 5 |
+| Fusil d'assaut | 3 × 18 (avant 3 × 14) | 650 | 260 | 0,8 s | moyennes | ±15° | rafale de 3 |
+| Fusil à pompe | 6 × 10 (avant 6 × 8) | 260 | 104 | 0,9 s | cartouches | ±35° | éventail de 40° |
+| Fusil de précision (sniper) | 75 (avant 60) | 1 100 | 440 | 1,6 s | lourdes | ±8° | perforant (traverse les cibles) |
+| Arbalète | 38 (avant 30) | 700 | 280 | 0,9 s | flèches | à définir | silencieuse |
 
-- **Objets lancés** (4e petit bouton, visée par glissement) : **grenade** (50 dégâts, rayon 120) et **fumigène** (bloque la vue 6 s).
+Notation : « A × B » = **A projectiles par tir, B dégâts par projectile** (mitraillette : rafale de 5 projectiles de 9 ; fusil d'assaut : rafale de 3 de 18 ; pompe : 6 plombs de 10). Total par tir : mitraillette 45 (avant 35), fusil d'assaut 54 (avant 42), pompe 60 (avant 48).
+
+- **Dégâts +25 %** **[RÉV. 4 — MODIFIÉ]** (demande d'ElMehdi) : toutes les valeurs de la rév. 3 sont multipliées par 1,25 et arrondies à l'entier le plus proche (la moitié vers le haut). Les bots utilisent les mêmes armes : ils font aussi +25 %. Les valeurs restent **[À RÉGLER]**, et la relecture de Gemini porte sur ce tableau final.
+- **Coups pour tuer** (100 PV, sans gilet, tous les projectiles touchent), avant → après : pistolet 6 → 5 · mitraillette 3 → 3 rafales · fusil d'assaut 3 → 2 rafales · pompe 3 → 2 tirs · sniper 2 → 2 · arbalète 4 → 3 · poings 12 → 10 · poignard 5 → 4.
+- **À savoir** : en v1, un relâchement tire UN seul projectile (le fusil fait 10 dégâts par tir, soit 10 tirs pour tuer). Le modèle de salves de la v2 multiplie déjà les dégâts par tir (fusil d'assaut : 42 par rafale, 54 avec +25 %). Avec 22 bots en Difficile, la partie sera très mortelle : à vérifier au jalon M6, avec le temps pour tuer comme critère. **[VALIDÉ]** : le +25 % s'applique au tableau v2 (décision d'ElMehdi du 14 novembre).
+
+- **Objets lancés** (4e petit bouton, visée par glissement) : **grenade** (63 dégâts, rayon 120 ; avant 50 **[RÉV. 4 : +25 %]**) et **fumigène** (bloque la vue 6 s).
 - **Raretés** : Commun / Rare / Épique : +0 / +12 % / +25 % de dégâts et +0 / +20 % / +40 % de munitions. Contour de couleur autour de l'icône.
 - **Soins et protection** : bandage +25 PV ; **thé à la menthe** +50 PV sur quelques secondes ; dattes +10 PV et petit gain de vitesse 5 s ; trousse de soin (rare, soin complet, interrompue si touché) ; **gilet** niveau 1 (−20 % de dégâts) et niveau 2 (−35 %). (v1 : un gilet à −30 %.)
 - **Limites de transport** : 2 chargeurs par type de munitions, 5 bandages, 3 thés.
 - **Quantité de butin** : **[RÉV. 3 — MODIFIÉ pour la Médina]** même densité que la décision validée (≈ 7 emplacements par million d'unités²), donc **~250 emplacements sur la Médina de 6 000²** (avant : ~90 sur 3 600²). **130 à 150 sur le Ksar et la Kasbah** (inchangé, **[VALIDÉ]**). Les ~250 sont **[VALIDÉ]**.
+- **Butin par participant** **[RÉV. 4]** : avec 23 participants, ~250 emplacements font ≈ 11 par participant (avant : ≈ 16 avec 16 participants), donc une carte plus disputée. Pour garder le ratio, il faudrait ≈ 360 emplacements. **[VALIDÉ]** : on garde **~250 emplacements** (pas ~360), décision d'ElMehdi du 14 novembre.
 - **Butin de la Médina (~250 emplacements)**, répartition indicative : ~85 au sol (surtout commun), ~55 caisses (plus de rare), ~90 dans les maisons (environ 2 par maison : soins, gilets), ~14 coffres de quartier riche (épique), plus **2 ravitaillements parachutés par match** (inchangé ; un 3e est possible si la carte paraît vide), annoncés sur la minimap 20 s avant (le seul repère visible de tous), avec une arme épique et un gilet niveau 2. Les caisses s'ouvrent en restant à côté environ 1 s (anneau de progression). Les maisons s'ouvrent : porte visible (voir §7), toit transparent à l'intérieur, murs qui bloquent déplacements et balles.
 - **Butin des éliminés** **[RÉV. 3 — MODIFIÉ : avant « laisse tomber son arme », règle qui n'était pas appliquée dans le code v1]** : un participant éliminé (joueur ou bot, tué par une balle ou par la zone) lâche **tout son butin** là où il tombe : ses armes (avec leur rareté et les munitions chargées), ses munitions de réserve, ses soins, son gilet et ses objets lancés. Les poings ne sont pas lâchés.
   - **Présentation** : objets répartis sur un cercle d'environ 60 unités autour du corps (pas empilés), petite animation de chute, contour de couleur selon la rareté. **Regroupement** pour limiter le nombre d'objets : un seul objet par type de munition, un seul par type de soin (avec le nombre) ; une pile fait donc une quinzaine d'objets au plus.
@@ -208,8 +234,19 @@ Style cartoon, sans sang (étincelles à l'impact). **Ce tableau n'a pas encore 
   - **Durée** : les objets restent jusqu'à la fin du match.
   - **Visibilité** : visibles dans le monde seulement avec une ligne de vue, **jamais sur la minimap** (même règle que les ennemis).
   - **Bots** : ils considèrent les piles comme du butin de grande valeur.
-  - **Hors compte** : ces objets s'ajoutent au butin de la carte (~250), ils ne le remplacent pas. Au plus 15 piles par match ; comptées dans le scénario *stress*.
+  - **Hors compte** : ces objets s'ajoutent au butin de la carte (~250), ils ne le remplacent pas. Au plus 22 piles par match ; comptées dans le scénario *stress*.
 - **Ordre de réalisation** : d'abord les 6 armes de base (poings, pistolet, mitraillette, fusil d'assaut, pompe, précision), puis arbalète, poignard, grenades, fumigènes.
+
+### Ligne de vue : aucun dégât à travers un obstacle **[RÉV. 4 — NOUVEAU]**
+Retour d'ElMehdi : on tire et on frappe à travers les murs et les maisons. **Règle : un dégât n'est infligé que s'il existe une ligne dégagée, sans aucun obstacle, entre l'attaquant et la cible.**
+- **S'applique à tout** : balles et flèches, plombs du fusil à pompe, coups de poing et de poignard, explosion de grenade (la ligne se mesure depuis le centre de l'explosion). **Pas** aux dégâts de zone.
+- **Ce qui bloque** (vue et dégâts) : murs pleins, couverts bas (étals, charrettes de souk, caisses empilées), **troncs d'arbres et de palmiers**, rochers. **Ce qui ne bloque pas** : les falaises (on voit et on tire par-dessus, décision déjà validée §7), l'eau, les buissons (**ils ne bloquent ni la vue ni les dégâts**, décision d'ElMehdi du 14 novembre ; voir §6 pour la discrétion de l'occupant), la fumée (elle bloque la vue, pas les balles : on peut tirer à l'aveugle). **[VALIDÉ]**
+- **Ce qu'on voit bloque vraiment** : la forme dessinée comme un solide est exactement celle qui bloque (pas de forme invisible qui bloque, pas de forme visible qui laisse passer). Pour un arbre, le tronc dessiné bloque ; le feuillage est décoratif.
+- **Un seul calcul** : le même test « ligne dégagée » sert à **voir**, à **viser** (verrouillage) et à **blesser**.
+- **Balles par trajectoire continue** : à chaque pas, on teste tout le segment parcouru, pas seulement le point d'arrivée ; le tir part du centre du tireur (on teste aussi le segment centre → bouche de l'arme). Aucune balle ne saute un mur fin, même à 30 images/s.
+- **Mêlée** : le coup ne touche que si le segment attaquant → cible est dégagé.
+- **Contrôle automatique** : en mode debug et en mode démo, chaque dégât est revalidé après coup ; le compteur « dégâts avec obstacle » doit rester à **0**.
+- **Causes trouvées dans le code v1** *(lues dans le code, pas encore reproduites sur le téléphone)* : (1) le coup de poing ne teste aucun mur ; (2) la balle est créée 22 unités devant le tireur et avance par pas de 9 à 21 unités selon l'arme et la fluidité : elle peut sauter un mur de 14 d'épaisseur, surtout quand on est collé au mur ou avec le sniper ; (3) le verrouillage choisit l'ennemi le plus proche sans tenir compte des murs, et les ennemis sont dessinés par-dessus les toits, donc visibles à travers les maisons ; (4) la collision d'un arbre ne fait que 55 % de son rayon dessiné.
 
 ## 9. Interface (HUD épuré, esprit Brawl Stars) **[VALIDÉ + ACCEPTÉ]**
 
@@ -233,8 +270,9 @@ Style cartoon, sans sang (étincelles à l'impact). **Ce tableau n'a pas encore 
 
 - **Objectif : moyenne ≥ 30 images/s sur le Redmi, pires images ≥ 24 images/s**, aucune image à plus de 100 ms plus de quelques fois par minute, **cible de 20 ms ou moins par image** (pour garder de la marge). Plafond à 60 images/s pour économiser la batterie sur un écran 120 Hz. **ElMehdi teste sur son Redmi et envoie des captures d'écran** du résumé de chaque scénario.
 - **Mode debug** (activé par un paramètre dans le lien) : FPS moyen, pire image, objets dessinés, calculs de ligne de vue par seconde.
-- **Trois scénarios à chaque étape** : *stress* (16 personnages à moins de 600 unités, zone dense, tirs) · *match complet* (10 min en mode démo, graine fixe) · *fin de match* (rétrécissement avec beaucoup d'effets). Plus un **test de durée** (un match après 10 minutes de jeu, pour la chauffe et la mémoire).
+- **Trois scénarios à chaque étape** : *stress* (23 personnages à moins de 600 unités, zone dense, tirs) · *match complet* (10 min en mode démo, graine fixe) · *fin de match* (rétrécissement avec beaucoup d'effets). Plus un **test de durée** (un match après 10 minutes de jeu, pour la chauffe et la mémoire).
 - **[RÉV. 3 — NOUVEAU] Scénario en plus pour la Médina de 6 000²** : *traversée*, courir d'un coin à l'autre en suivant la diagonale, pour mesurer le chargement des tuiles de décor et la mémoire. Même seuils que les autres scénarios.
+- **[RÉV. 4 — NOUVEAU] Test « mur »** : tirs (sniper, pompe, pistolet) et coups de poing à bout portant contre un mur, à 30 et à 60 images/s : **0 dégât** de l'autre côté. Même contrôle en mode démo.
 - **Aucune étape n'est validée tant qu'elle ne passe pas ces tests.** Pas de promesse.
 - **Ordre de travail** : (1) DECISIONS.md v2 validé → (2) ARCHITECTURE.md validé → (3) mesure de performance (jalon M0, voir `M0_RELEVE.md`) → (4) contrôles → (5) Médina d'Ambre, avec le **mode démo** (bots seuls, graine fixe) → (6) tests → (7) seulement ensuite les cartes 2 et 3.
 - **Numéro de version** affiché dans le jeu et en haut du code. Une ligne dans TACHES.md à chaque mise à jour (date, version, ce qui change).
@@ -268,7 +306,14 @@ Style cartoon, sans sang (étincelles à l'impact). **Ce tableau n'a pas encore 
 13. **[RÉV. 3] Piles de butin des éliminés** (§8) et **portes visibles** (§7) : **validés**.
 14. **[RÉV. 3] Sur 6 000²** : nom du quartier à l'entrée, départs répartis, décor par tuiles : **validés** (ARCHITECTURE.md mis à jour).
 
-**Restent ouverts** : les points 3 (héros équilibrés ou non), 4 (lien public du jeu) et 6 (valeurs d'armes, relecture de Gemini).
+15. **[RÉV. 4] Nombre de bots** : 22 bots (23 participants), Difficile par défaut, **décidé par ElMehdi** ; sélecteur de niveau dans le lobby **validé** (14 novembre).
+16. **[RÉV. 4] Dégâts +25 %** (valeurs arrondies dans le tableau §8) : **validé** par ElMehdi, sur le tableau v2.
+17. **[RÉV. 4] Auto-visée à 40 % de la portée** (60 % était proposé, 40 % choisi par ElMehdi) : distances 180 · 152 · 260 · 104 · 440 · 280 ; mêlée non concernée. **Validé** (14 novembre).
+18. **[RÉV. 4] Ligne de vue** : règle **validée**. Les buissons ne bloquent ni la vue ni les dégâts (**décision d'ElMehdi**) ; la fumée et les falaises ne bloquent pas les balles ; les troncs d'arbres bloquent.
+19. **[RÉV. 4] Butin par participant** : on garde **~250 emplacements** (≈ 11 par participant), **validé**.
+20. **[RÉV. 4 — VALIDÉ le 15 novembre 2026] Buissons et discrétion** : un buisson n'est jamais un obstacle (ni vue, ni dégâts, décidé le 14 novembre). La règle de discrétion de la rév. 2 (§6 : un joueur **dans** un buisson est invisible au-delà de 180 unités) est **conservée — décision d'ElMehdi du 15 novembre 2026** (« Yb9a mkhebbi f l-bush (180) »). Les buissons ne deviennent donc pas purement décoratifs.
+
+**Restent ouverts** : les points 3 (héros équilibrés ou non), 4 (lien public du jeu) et 6 (valeurs d'armes, relecture de Gemini). Le point 20 (buissons) est tranché depuis le 15 novembre 2026.
 
 ## 13. Hors du périmètre actuel
 
@@ -280,4 +325,4 @@ Pas de multijoueur, de comptes, de boutique, d'achats intégrés, de modes équi
 - Verrou de continuité : chaque scène commence exactement là où la précédente s'est terminée. Uniquement les dialogues français écrits, aucun dialogue ni personnage inventé.
 
 ---
-*v2 (révision 3) — validé par ElMehdi le 2026-11-13. Remplace la révision 2.*
+*v2 (révision 4) — validé par ElMehdi le 2026-11-14. Remplace la révision 3.*
