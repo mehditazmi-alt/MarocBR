@@ -1,20 +1,20 @@
 # DECISIONS.md — MarocBR (source de vérité) — VERSION 2, RÉVISION 4
 
-**Statut : VALIDÉ par ElMehdi le 14 novembre 2026 (version 2, révision 4) ; point 20 (buissons) tranché le 15 novembre 2026. Source de vérité du projet.**
-La révision 4 remplace la révision 3 (validée le 13 novembre 2026). Aucun point propre à cette révision n'est en attente. Les marques [RÉV. 3] et [RÉV. 4] indiquent ce qui a changé ; elles sont conservées pour l'historique.
+**Statut : VALIDÉ par ElMehdi le 14 novembre 2026 (version 2, révision 4) ; point 20 (buissons) tranché le 15 novembre 2026 ; couleur des portes (rouge) tranchée le 18 novembre 2026. Source de vérité du projet.**
+La révision 4 remplace la révision 3 (validée le 13 novembre 2026). Un seul point proposé le 18 novembre reste à confirmer : le point 21 de la section 12 (liseré clair autour des portes rouges). Les marques [RÉV. 3] et [RÉV. 4] indiquent ce qui a changé ; elles sont conservées pour l'historique.
 Règle : on ne modifie pas une règle validée sans l'accord d'ElMehdi. Ce qui n'est pas écrit ici n'est pas décidé.
 
 Légende : **[VALIDÉ]** décidé par ElMehdi · **[ACCEPTÉ]** proposé par Claude, relu par ChatGPT, retenu · **[À RÉGLER]** valeur de départ, à ajuster par des tests sur le Redmi · **[À CONFIRMER]** point ouvert, voir section 12 · **[RÉV. 3 — NOUVEAU]** ajouté dans la révision 3 · **[RÉV. 3 — MODIFIÉ]** change une décision de la révision 2 (l'ancienne valeur est rappelée) · **[RÉV. 4 — NOUVEAU / MODIFIÉ / PRÉCISION]** même chose pour la révision 4, **validée le 14 novembre 2026**.
 
 ---
 
-## 0. Révision 4 : ce qui a changé (validé le 14 novembre 2026, point 20 le 15 novembre)
+## 0. Révision 4 : ce qui a changé (validé le 14 novembre 2026, point 20 le 15 novembre, portes rouges le 18 novembre)
 
 | # | Sujet | Avant (rév. 3 validée) | Maintenant (rév. 4) | Statut |
 |---|---|---|---|---|
 | 1 | Nombre de bots | 15 bots, 16 participants | **22 bots, 23 participants**, niveau **Difficile** par défaut, sélecteur de niveau dans le lobby (§1, §5) | **MODIFIÉ, VALIDÉ** |
 | 2 | Mouvement des bots | décisions, profils, renforcement | **chemins par les portes, détection de blocage, jamais immobile sans raison** (§5) | NOUVEAU, **VALIDÉ** |
-| 3 | Portes | cadre, seuil, battant, repère | + **le toit s'interrompt à la porte** (§7) | PRÉCISION, **VALIDÉ** |
+| 3 | Portes | cadre turquoise, seuil, battant, repère | + **le toit s'interrompt à la porte** ; **portes ROUGES** au lieu du cadre turquoise (§7) | PRÉCISION et **MODIFIÉ, VALIDÉ** (couleur : 18 novembre) |
 | 4 | Dégâts des armes | tableau de la rév. 3 | **+25 %** sur toutes les armes, sur le tableau v2 (§8) | **MODIFIÉ, VALIDÉ** |
 | 5 | Auto-visée | verrouillage jusqu'à 100 % de la portée de l'arme | **40 %** de la portée (60 % avait été proposé) : 180 · 152 · 260 · 104 · 440 · 280 (§3, §8) | **MODIFIÉ, VALIDÉ** |
 | 6 | Ligne de vue | murs et couverts bloquent les balles ; ennemis visibles en ligne de vue | **aucun dégât sans ligne dégagée** (balles, mêlée, explosions), un seul calcul, balles par segment ; **les buissons ne bloquent ni la vue ni les dégâts** (§8) ; **la discrétion de l'occupant reste** (§6) | NOUVEAU, **VALIDÉ** |
@@ -184,13 +184,14 @@ Trois systèmes séparés : (1) la **minimap** (aucun ennemi), (2) la **vision r
 
 ### Maisons : portes visibles **[RÉV. 3 — NOUVEAU]**
 Retour d'ElMehdi : on ne voit pas où est la porte. Dans la v1, la porte est un trou de 64 unités dans le mur, de la couleur du sol.
-- **Cadre** : deux piliers de part et d'autre de l'ouverture, en **bleu turquoise (zellige)** ou blanc chaux selon le quartier, nettement plus clairs que le mur.
+- **Cadre** : deux piliers de part et d'autre de l'ouverture, **en rouge vif** **[RÉV. 4 — MODIFIÉ le 18 novembre 2026, décision d'ElMehdi : avant « bleu turquoise (zellige) ou blanc chaux selon le quartier »]**. **Toutes les portes sont rouges**, dans tous les quartiers et sur toutes les cartes. Le rouge vif est réservé aux portes : les murs restent terracotta, ocre ou chaux, jamais rouge vif.
+- **Liseré clair** **[RÉV. 4 — PRÉCISION proposée par Claude, À CONFIRMER]** : un rouge posé sur un mur terracotta se distingue mal (les deux sont dans les rouge-orangé, et c'est pire pour un joueur qui confond le rouge et l'orange). Le rouge de la porte est donc **entouré d'un liseré blanc cassé** (quelques unités d'épaisseur) et posé sur le seuil clair. La forme (arche, ouverture dans le toit) reste reconnaissable même sans la couleur.
 - **Le toit s'interrompt à la porte** **[RÉV. 4 — PRÉCISION]** : vu de l'extérieur, le toit ne recouvre jamais l'ouverture ni son cadre (encoche dans le toit) ; le cadre, le seuil et le battant sont dessinés **au-dessus** du toit. *Constat sur la v1 : le toit opaque recouvre toute la maison, porte comprise ; la porte n'apparaît que de l'intérieur (trou de 64 unités de la couleur du sol).*
 - **Seuil** : une dalle claire de 64 × 24 unités devant la porte, à l'extérieur, avec **une arche en fer à cheval** dessinée au sol (la forme se reconnaît même sans la couleur).
-- **Battant** : fermé, c'est un battant de bois de couleur vive avec une poignée ; ouvert (quelqu'un à moins de ~90 unités), il pivote à angle droit et **l'ouverture se voit bien**. Il se referme quand plus personne n'est à moins de ~130 unités pendant 2 s. **C'est cosmétique** : l'ouverture reste toujours franchissable, la vue et les balles passent par l'ouverture.
+- **Battant** : fermé, c'est un battant de bois **rouge vif** avec une poignée claire ; ouvert (quelqu'un à moins de ~90 unités), il pivote à angle droit et **l'ouverture se voit bien**. Il se referme quand plus personne n'est à moins de ~130 unités pendant 2 s. **C'est cosmétique** : l'ouverture reste toujours franchissable, la vue et les balles passent par l'ouverture.
 - **Repère de proximité** : à moins de 300 unités et avec une ligne de vue, le seuil brille doucement (pulsation de 0,8 s).
 - **Une porte par maison** (deux pour les plus grandes), orientée vers la rue la plus proche (pas toujours au sud comme en v1), avec **100 unités libres devant** (vérifié au chargement). Pas de repère sur la minimap.
-- **Critère de réussite [À RÉGLER]** : contraste fort contre le mur et le sol, **testé en plein soleil sur le Redmi**. ElMehdi valide sur capture d'écran ; les couleurs exactes se règlent au jalon M8.
+- **Critère de réussite [À RÉGLER]** : contraste fort contre le mur et le sol, **testé en plein soleil sur le Redmi**. ElMehdi valide sur capture d'écran ; la **nuance exacte du rouge** et le liseré se règlent au jalon M8 ; la couleur rouge, elle, est décidée. Si le rouge manque de contraste sur un mur terracotta malgré le liseré, on le signale à ElMehdi.
 
 ### Véhicules **[RÉV. 3 — TRANCHÉ : option A, retirés]**
 Retour d'ElMehdi : les voitures de la v1 (3 obstacles décoratifs de 104 × 48 unités) sont grandes et inutiles, « ça marche ou rien ». **Décision d'ElMehdi du 13 novembre 2026 : option A.**
@@ -303,7 +304,7 @@ Retour d'ElMehdi : on tire et on frappe à travers les murs et les maisons. **R�
 10. **[RÉV. 3] Taille de la Médina** : **6 000 × 6 000, validé** (~44 maisons, ~250 emplacements de butin, rayons de zone en unités). Le Ksar et la Kasbah restent inchangés.
 11. **[RÉV. 3] Dégâts de zone** : **2 · 3 · 4 · 5 · 6 % des PV max par seconde, validé** ; cercle final à 6 % ; dégâts appliqués en continu.
 12. **[RÉV. 3] Force des bots** : **objectif validé** : le joueur moyen gagne environ 1 match sur 4 au niveau Normal et environ 1 sur 10 au niveau Difficile.
-13. **[RÉV. 3] Piles de butin des éliminés** (§8) et **portes visibles** (§7) : **validés**.
+13. **[RÉV. 3] Piles de butin des éliminés** (§8) et **portes visibles** (§7) : **validés** ; **couleur des portes : rouge** (décision d'ElMehdi du 18 novembre 2026, avant : cadre turquoise).
 14. **[RÉV. 3] Sur 6 000²** : nom du quartier à l'entrée, départs répartis, décor par tuiles : **validés** (ARCHITECTURE.md mis à jour).
 
 15. **[RÉV. 4] Nombre de bots** : 22 bots (23 participants), Difficile par défaut, **décidé par ElMehdi** ; sélecteur de niveau dans le lobby **validé** (14 novembre).
@@ -312,8 +313,9 @@ Retour d'ElMehdi : on tire et on frappe à travers les murs et les maisons. **R�
 18. **[RÉV. 4] Ligne de vue** : règle **validée**. Les buissons ne bloquent ni la vue ni les dégâts (**décision d'ElMehdi**) ; la fumée et les falaises ne bloquent pas les balles ; les troncs d'arbres bloquent.
 19. **[RÉV. 4] Butin par participant** : on garde **~250 emplacements** (≈ 11 par participant), **validé**.
 20. **[RÉV. 4] Buissons et discrétion** : **tranché par ElMehdi (2026-11-15)** : un buisson n'est jamais un obstacle (ni vue, ni dégâts) ; **la discrétion reste** : un joueur **dans** un buisson est invisible au-delà de 180 unités (mesurées de contour à contour), visible en dessous ; il reste blessable par un tir à la main.
+21. **[RÉV. 4 — À CONFIRMER] Liseré clair autour des portes rouges** (§7) : proposé par Claude pour que le rouge se distingue des murs terracotta. À valider, ou à corriger si ElMehdi préfère une porte rouge sans liseré.
 
-**Restent ouverts** : les points 3 (héros équilibrés ou non), 4 (lien public du jeu) et 6 (valeurs d'armes, relecture de Gemini).
+**Restent ouverts** : les points 3 (héros équilibrés ou non), 4 (lien public du jeu) et 6 (valeurs d'armes, relecture de Gemini), et le point 21 (liseré clair autour des portes rouges).
 
 ## 13. Hors du périmètre actuel
 
@@ -325,4 +327,4 @@ Pas de multijoueur, de comptes, de boutique, d'achats intégrés, de modes équi
 - Verrou de continuité : chaque scène commence exactement là où la précédente s'est terminée. Uniquement les dialogues français écrits, aucun dialogue ni personnage inventé.
 
 ---
-*v2 (révision 4) — validé par ElMehdi le 2026-11-14 ; point 20 (buissons) tranché le 2026-11-15. Remplace la révision 3.*
+*v2 (révision 4) — validé par ElMehdi le 2026-11-14 ; point 20 (buissons) tranché le 2026-11-15 ; couleur des portes (rouge) tranchée le 2026-11-18. Remplace la révision 3.*

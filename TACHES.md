@@ -9,6 +9,7 @@
 - [x] Langue : étiquettes en français + bandeaux en darija, sans réglage FR/darija
 - [x] Test sur le Redmi de la version de mesure v1 : retours intégrés en révisions 3 et 4
 - [x] **Dégâts des armes : +25 % confirmé par ElMehdi (18 novembre 2026)**, pas +30 % (DECISIONS §8)
+- [x] **Couleur des portes : ROUGE (18 novembre 2026)**, à la place du cadre turquoise de la rév. 4 (DECISIONS §7). Rappels de la même date : 22 bots en Difficile par défaut et aucun dégât sans ligne dégagée, déjà dans la rév. 4
 
 ## En cours : jalon M0 (relevé et mesure)
 - [ ] **ElMehdi** : refaire les 4 scénarios **en paysage** et envoyer les captures des panneaux **RÉSUMÉ** (stress, match, fin avec `?rapide=1`, stress après ~10 min de jeu). **Toujours en attente au 18 novembre.**
@@ -20,6 +21,7 @@
 - [ ] Héros : équilibrés (même statistiques) ou par personnage (la rév. 4 les garde équilibrés)
 - [ ] Lien public du jeu : laisser public, repo privé ou lien peu connu
 - [ ] Valeurs d'armes (tableau DECISIONS §8, +25 %) : relecture d'équilibrage par Gemini
+- [ ] Liseré clair (blanc cassé) autour des portes rouges, pour qu'elles se distinguent des murs terracotta (DECISIONS §12 point 21). Proposition de Claude à valider
 - [ ] Ordre des jalons : garder M1 → M9 tel quel, ou voir les bots plus tôt (arène de test + mode démo) ? Proposition de Claude à valider
 - [ ] Gemini : mission d'essai (12 messages en darija + relecture du plan, 5 remarques maximum). Réponses à rapporter par ElMehdi, à relayer par Muse pour revue point par point
 

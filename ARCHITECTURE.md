@@ -1,6 +1,6 @@
 # ARCHITECTURE.md — MarocBR v2
 
-**Statut : VALIDÉ par ElMehdi le 14 novembre 2026 (version 2, révision 4) ; point 20 (buissons) tranché le 15 novembre 2026.** Remplace la révision 3 (validée le 13 novembre 2026). Mis à jour pour DECISIONS.md v2 révision 4 : 23 participants, ligne dégagée unique, balles par segment, navigation par les portes, anti-blocage des bots, verrouillage automatique à 40 % de la portée. Dépend de DECISIONS.md v2 révision 4.
+**Statut : VALIDÉ par ElMehdi le 14 novembre 2026 (version 2, révision 4) ; point 20 (buissons) tranché le 15 novembre 2026 ; couleur des portes (rouge) tranchée le 18 novembre 2026.** Remplace la révision 3 (validée le 13 novembre 2026). Mis à jour pour DECISIONS.md v2 révision 4 : 23 participants, ligne dégagée unique, balles par segment, navigation par les portes, anti-blocage des bots, verrouillage automatique à 40 % de la portée. Dépend de DECISIONS.md v2 révision 4.
 Ce document décrit **comment le code est organisé**, pas le jeu. Si les deux se contredisent, DECISIONS.md gagne.
 
 Public : ElMehdi (décisions), Muse (rangement des fichiers), Gemini et ChatGPT (relecture), Claude (seul à écrire le code).
@@ -69,7 +69,7 @@ Les modules sont rangés en couches. **Un module n'appelle que les couches en de
 
 | Module | Fait | Ne fait pas |
 |---|---|---|
-| `config.js` | Toutes les constantes réglables (caméra 520, seuils tactiles, temps de zone, plafond d'images) | Aucune logique |
+| `config.js` | Toutes les constantes réglables (caméra 520, seuils tactiles, temps de zone, plafond d'images, **couleurs des portes : rouge vif et liseré clair, réglables en un seul endroit**) | Aucune logique |
 | `util.js` | Vecteurs, distances, hasard à graine fixe (pour rejouer un match), grille | Aucune règle de jeu |
 | `data/armes.js` | Le tableau des armes (dégâts, portée, cadence, aimant, **distance de verrouillage = 40 % de la portée**…) | Aucun comportement |
 | `data/surfaces.js` | **Un seul tableau** des surfaces (sable, pierre, eau, dune, intérieur, buisson) : vitesse, bruit, visibilité | Aucune logique de carte |
@@ -92,7 +92,7 @@ Les modules sont rangés en couches. **Un module n'appelle que les couches en de
 | `ai/cerveau.js` | Hiérarchie de décisions, profils, réaction, tir anticipé, mouvements de combat, soins à l'abri, niveaux de difficulté, **suivi de chemin par les portes et détection de blocage** → produit des Commandes | N'agit jamais directement sur le monde |
 | `input/tactile.js` | Doigts, rôles, zones, annulation, interruptions (section 9) | Ne déplace rien |
 | `input/traduction.js` | Transforme les gestes en Commandes du joueur | |
-| `render/monde.js` | Dessin du monde, caméra, buissons, toits transparents **avec encoche à la porte**, portes (cadre, seuil, battant, dessinés au-dessus du toit), piles de butin ; **un ennemi n'est dessiné que s'il est visible** (jamais par-dessus un toit) | Lecture seule |
+| `render/monde.js` | Dessin du monde, caméra, buissons, toits transparents **avec encoche à la porte**, portes **rouges** (cadre, seuil, battant, liseré clair, dessinés au-dessus du toit), piles de butin ; **un ennemi n'est dessiné que s'il est visible** (jamais par-dessus un toit) | Lecture seule |
 | `render/tuiles.js` | **Décor fixe par tuiles** : dessine, garde et libère les tuiles proches de la caméra (sol, murs, rues) | Lecture seule |
 | `render/hud.js` | Les 6 éléments permanents et les messages (DECISIONS §9) | Lecture seule |
 | `render/minimap.js` | Minimap sans ennemis | Lecture seule |
@@ -155,7 +155,7 @@ Chaque fichier de carte contient **exactement les mêmes rubriques**. Si une rub
 | Identité | nom, taille (largeur × hauteur), numéro de version du contrat |
 | Obstacles | liste de formes (rectangles, cercles) typées : mur plein, couvert bas (étals, **charrettes de souk**, caisses empilées, **troncs d'arbres et de palmiers**, rochers), falaise |
 | Surfaces | zones typées selon le **tableau commun** `data/surfaces.js` : sable, pierre, eau, dune, intérieur, buisson |
-| Bâtiments | maisons (murs, **porte avec position, orientation, cadre et seuil**, zone de toit **avec encoche à la porte**), points de butin à l'intérieur |
+| Bâtiments | maisons (murs, **porte avec position, orientation, cadre et seuil** (couleur commune à toutes les cartes, rouge, définie dans `config.js` et non par carte), zone de toit **avec encoche à la porte**), points de butin à l'intérieur |
 | Points de butin | au sol, caisses, coffres, avec rareté de base |
 | Départs | points de départ des 23 participants, **répartis** (au moins ~800 unités entre deux départs, réglable), groupés seulement si la carte l'exige |
 | Zone | centre et rayon de départ (demi-diagonale), **rayons de zone en % pour chaque phase** (par carte), règle de choix du centre suivant (**position aléatoire, toujours dans l'ancien cercle**) |
@@ -192,12 +192,12 @@ Chaque jalon est testé sur le Redmi avant le suivant. Format de retour d'ElMehd
 | **M0** Relevé et mesure | Relevé des valeurs de l'ancien code (**fait**, voir `M0_RELEVE.md`) ; outil de mesure `perf-debug.js` branché sur une copie de l'ancien jeu ; référence de performance | On sait combien d'images/s fait l'ancien jeu sur le Redmi (4 captures de résumé) | Muse met en place `legacy/` ; ElMehdi lance les scénarios et envoie les captures |
 | **M1** Squelette | Découpage en fichiers, `config`, état, boucle à pas fixe, caméra à 520, version affichée | Le jeu actuel fonctionne à l'identique, même FPS | Range les fichiers dans le dépôt |
 | **M2** Contrôles | `input/*`, commande unique de tir, annulation, interruptions, paysage verrouillé, **verrouillage automatique à 40 % de la portée** | Tap, maintien, glissement et annulation marchent ; aucun doigt fantôme ; testé par 5 personnes | Organise les 5 testeurs, note les ressentis |
-| **M3** Médina (base) | Carte 6 000² au contrat, **décor par tuiles**, collision (**balles par segment**), vision et **ligne dégagée unique**, buissons, portes simples avec encoche de toit, charrettes de souk, 23 entités sans IA, départs répartis | 30 FPS minimum avec 23 entités **et** scénario *traversée* réussi (pas de saccade ni de dépassement mémoire) | Test de ralentissement du processeur ; schéma des quartiers pour le remplissage |
+| **M3** Médina (base) | Carte 6 000² au contrat, **décor par tuiles**, collision (**balles par segment**), vision et **ligne dégagée unique**, buissons, portes rouges simples avec encoche de toit, charrettes de souk, 23 entités sans IA, départs répartis | 30 FPS minimum avec 23 entités **et** scénario *traversée* réussi (pas de saccade ni de dépassement mémoire) | Test de ralentissement du processeur ; schéma des quartiers pour le remplissage |
 | **M4** Bruit et visibilité | `world/bruit`, `audio`, flèches, ennemis invisibles sur la minimap | On repère un ennemi caché au son ; scénario *stress* réussi | Test avec casque et en silencieux |
 | **M5** Bots | `world/navigation` (**portes, anti-blocage**), `ai/*`, **22 bots**, 3 profils (6 / 9 / 7), renforcement (tir anticipé, mouvements de combat, soins, écoute), niveaux de difficulté (**Difficile par défaut**), mode démo, mesure du rythme de survie | 3 matchs complets, durée 10–11 min 30, aucune anomalie dans les contrôles (dont **aucun bot immobile plus de 5 s sans raison**) ; **taux de victoire du joueur mesuré** (objectif : ~1 sur 4 en Normal, ~1 sur 10 en Difficile, sur assez de matchs, nombre fixé avec ElMehdi) | 3 matchs notés (durée, bugs) |
 | **M6** Armes et butin | 6 armes de base, butin, caisses, maisons, soins, ravitaillements, **piles des éliminés** | Un match complet jouable ; chaque mort laisse sa pile complète ; **test « mur »** (tirs et coups à bout portant contre un mur, à 30 et 60 images/s) : 0 dégât ; dégâts du tableau DECISIONS §8 (+25 %) | Relecture Gemini du tableau |
 | **M7** Zone et fin | Chronologie DECISIONS §2, **dégâts en % des PV max (en continu)**, avertissements, fin de match, écran de résultat | Tout le rythme est vérifié en mode accéléré ×4 puis en normal | Teste les cas limites (égalité) |
-| **M8** Finition Médina | HUD épuré final, textes darija, retrait des mentions, **portes au bon contraste (testé au soleil)**, version installable | **ElMehdi valide la Médina** | Vérifie 3 formats d'écran |
+| **M8** Finition Médina | HUD épuré final, textes darija, retrait des mentions, **portes rouges au bon contraste (nuance et liseré réglés, testé au soleil)**, version installable | **ElMehdi valide la Médina** | Vérifie 3 formats d'écran |
 | **M9+** Cartes 2 et 3, armes en plus | Seulement après M8 | Même contrat, même moteur | |
 
 Le jalon M8 est la porte d'entrée vers les cartes 2 et 3. Pas avant.
@@ -225,4 +225,4 @@ Le jalon M8 est la porte d'entrée vers les cartes 2 et 3. Pas avant.
 - **Version Unity** : les données (armes, surfaces, cartes, textes, profils de bots) et les règles (zone, bruit, hiérarchie des bots) se retraduisent presque telles quelles en C#.
 
 ---
-*ARCHITECTURE.md v2 (révision 4) — validé par ElMehdi le 2026-11-14 ; point 20 (buissons) tranché le 2026-11-15. Remplace la révision 3.*
+*ARCHITECTURE.md v2 (révision 4) — validé par ElMehdi le 2026-11-14 ; point 20 (buissons) tranché le 2026-11-15 ; couleur des portes (rouge) tranchée le 2026-11-18. Remplace la révision 3.*
