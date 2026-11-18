@@ -1,14 +1,14 @@
 # DECISIONS.md — MarocBR (source de vérité) — VERSION 2, RÉVISION 4
 
-**Statut : VALIDÉ par ElMehdi le 14 novembre 2026 (version 2, révision 4) ; point 20 tranché le 15 novembre 2026. Source de vérité du projet.**
-La révision 4 remplace la révision 3 (validée le 13 novembre 2026). Le point 20 de la section 12 (buissons : discrétion de l'occupant), dernier point ouvert de cette révision, a été tranché par ElMehdi le 15 novembre 2026 : la règle de discrétion de la rév. 2 est conservée. Les marques [RÉV. 3] et [RÉV. 4] indiquent ce qui a changé ; elles sont conservées pour l'historique.
+**Statut : VALIDÉ par ElMehdi le 14 novembre 2026 (version 2, révision 4) ; point 20 (buissons) tranché le 15 novembre 2026. Source de vérité du projet.**
+La révision 4 remplace la révision 3 (validée le 13 novembre 2026). Aucun point propre à cette révision n'est en attente. Les marques [RÉV. 3] et [RÉV. 4] indiquent ce qui a changé ; elles sont conservées pour l'historique.
 Règle : on ne modifie pas une règle validée sans l'accord d'ElMehdi. Ce qui n'est pas écrit ici n'est pas décidé.
 
 Légende : **[VALIDÉ]** décidé par ElMehdi · **[ACCEPTÉ]** proposé par Claude, relu par ChatGPT, retenu · **[À RÉGLER]** valeur de départ, à ajuster par des tests sur le Redmi · **[À CONFIRMER]** point ouvert, voir section 12 · **[RÉV. 3 — NOUVEAU]** ajouté dans la révision 3 · **[RÉV. 3 — MODIFIÉ]** change une décision de la révision 2 (l'ancienne valeur est rappelée) · **[RÉV. 4 — NOUVEAU / MODIFIÉ / PRÉCISION]** même chose pour la révision 4, **validée le 14 novembre 2026**.
 
 ---
 
-## 0. Révision 4 : ce qui a changé (validé le 14 novembre 2026)
+## 0. Révision 4 : ce qui a changé (validé le 14 novembre 2026, point 20 le 15 novembre)
 
 | # | Sujet | Avant (rév. 3 validée) | Maintenant (rév. 4) | Statut |
 |---|---|---|---|---|
@@ -17,7 +17,7 @@ Légende : **[VALIDÉ]** décidé par ElMehdi · **[ACCEPTÉ]** proposé par Cla
 | 3 | Portes | cadre, seuil, battant, repère | + **le toit s'interrompt à la porte** (§7) | PRÉCISION, **VALIDÉ** |
 | 4 | Dégâts des armes | tableau de la rév. 3 | **+25 %** sur toutes les armes, sur le tableau v2 (§8) | **MODIFIÉ, VALIDÉ** |
 | 5 | Auto-visée | verrouillage jusqu'à 100 % de la portée de l'arme | **40 %** de la portée (60 % avait été proposé) : 180 · 152 · 260 · 104 · 440 · 280 (§3, §8) | **MODIFIÉ, VALIDÉ** |
-| 6 | Ligne de vue | murs et couverts bloquent les balles ; ennemis visibles en ligne de vue | **aucun dégât sans ligne dégagée** (balles, mêlée, explosions), un seul calcul, balles par segment ; **les buissons ne bloquent ni la vue ni les dégâts** (§8) | NOUVEAU, **VALIDÉ** |
+| 6 | Ligne de vue | murs et couverts bloquent les balles ; ennemis visibles en ligne de vue | **aucun dégât sans ligne dégagée** (balles, mêlée, explosions), un seul calcul, balles par segment ; **les buissons ne bloquent ni la vue ni les dégâts** (§8) ; **la discrétion de l'occupant reste** (§6) | NOUVEAU, **VALIDÉ** |
 | 7 | Butin | ~250 emplacements sur la Médina | **~250 conservés** (≈ 11 par participant), pas ~360 (§8) | **VALIDÉ** |
 
 ARCHITECTURE.md a été mis à jour en révision 4 (validée) : 23 participants, ligne dégagée unique, balles par segment, navigation par les portes, tests. Les constats sur la v1 (captures et code) sont dans §5, §7 et §8 ; **la v1 reste figée** (référence de mesure). Tout le reste est inchangé.
@@ -141,8 +141,8 @@ Trois systèmes séparés : (1) la **minimap** (aucun ennemi), (2) la **vision r
 - **On n'entend que les 3 sons les plus forts à la fois.** Un son n'en remplace un autre que s'il est au moins 15 % plus fort, et chaque son garde sa place au moins 0,4 s.
 - **Flèches de bruit à l'écran : actives par défaut, désactivables dans les réglages.** Petites flèches discrètes au bord de l'écran dans la direction du bruit. Légère vibration pour les bruits très proches. **[VALIDÉ]**
 - **Coups de feu** audibles (portée 1 100) avec une flèche brève. **[À CONFIRMER par test]**
-- **Buissons** : un joueur dans un buisson est invisible, sauf à moins de **180 unités mesurées de contour à contour** (pas de centre à centre). Entrée et sortie avec un fondu de 0,2 s. On l'entend quand même.
-- **Buissons : jamais un obstacle** **[RÉV. 4 — PRÉCISION, décision d'ElMehdi du 14 novembre]** : un buisson ne bloque **ni la vue ni les dégâts**. Un buisson entre deux joueurs ne cache personne, et on peut toucher un joueur qui s'y trouve en tirant à la main. La discrétion décrite ci-dessus ne concerne que celui qui est **dedans** (pas de verrouillage automatique sur lui au-delà de 180 unités) et n'empêche jamais les dégâts. **[VALIDÉ le 15 novembre 2026, §12 point 20]**
+- **Buissons** : un joueur dans un buisson est invisible, sauf à moins de **180 unités mesurées de contour à contour** (pas de centre à centre). Entrée et sortie avec un fondu de 0,2 s. On l'entend quand même. **[VALIDÉ par ElMehdi le 15 novembre 2026 : la discrétion reste]**
+- **Buissons : jamais un obstacle** **[RÉV. 4 — PRÉCISION, décision d'ElMehdi du 14 novembre]** : un buisson ne bloque **ni la vue ni les dégâts**. Un buisson entre deux joueurs ne cache personne, et on peut toucher un joueur qui s'y trouve en tirant à la main. La discrétion décrite ci-dessus ne concerne que celui qui est **dedans** (pas de verrouillage automatique sur lui au-delà de 180 unités) et n'empêche jamais les dégâts. **[VALIDÉ par ElMehdi le 15 novembre 2026]**
 - **Option par carte** : une limite de vision indépendante des obstacles, à comparer à la vision par ligne de vue (surtout sur la Kasbah des Sables).
 - **Sons générés par le navigateur** (Web Audio), pas de fichiers sous licence. L'audio ne démarre qu'après le premier appui sur « Jouer ».
 
@@ -217,7 +217,7 @@ Style cartoon, sans sang (étincelles à l'impact). **Ce tableau n'a pas encore 
 
 Notation : « A × B » = **A projectiles par tir, B dégâts par projectile** (mitraillette : rafale de 5 projectiles de 9 ; fusil d'assaut : rafale de 3 de 18 ; pompe : 6 plombs de 10). Total par tir : mitraillette 45 (avant 35), fusil d'assaut 54 (avant 42), pompe 60 (avant 48).
 
-- **Dégâts +25 %** **[RÉV. 4 — MODIFIÉ]** (demande d'ElMehdi) : toutes les valeurs de la rév. 3 sont multipliées par 1,25 et arrondies à l'entier le plus proche (la moitié vers le haut). Les bots utilisent les mêmes armes : ils font aussi +25 %. Les valeurs restent **[À RÉGLER]**, et la relecture de Gemini porte sur ce tableau final.
+- **Dégâts +25 %** **[RÉV. 4 — MODIFIÉ]** (demande d'ElMehdi, **reconfirmée le 18 novembre 2026 : +25 %, et non +30 %**) : toutes les valeurs de la rév. 3 sont multipliées par 1,25 et arrondies à l'entier le plus proche (la moitié vers le haut). Les bots utilisent les mêmes armes : ils font aussi +25 %. Les valeurs restent **[À RÉGLER]**, et la relecture de Gemini porte sur ce tableau final.
 - **Coups pour tuer** (100 PV, sans gilet, tous les projectiles touchent), avant → après : pistolet 6 → 5 · mitraillette 3 → 3 rafales · fusil d'assaut 3 → 2 rafales · pompe 3 → 2 tirs · sniper 2 → 2 · arbalète 4 → 3 · poings 12 → 10 · poignard 5 → 4.
 - **À savoir** : en v1, un relâchement tire UN seul projectile (le fusil fait 10 dégâts par tir, soit 10 tirs pour tuer). Le modèle de salves de la v2 multiplie déjà les dégâts par tir (fusil d'assaut : 42 par rafale, 54 avec +25 %). Avec 22 bots en Difficile, la partie sera très mortelle : à vérifier au jalon M6, avec le temps pour tuer comme critère. **[VALIDÉ]** : le +25 % s'applique au tableau v2 (décision d'ElMehdi du 14 novembre).
 
@@ -240,7 +240,7 @@ Notation : « A × B » = **A projectiles par tir, B dégâts par projectile** (
 ### Ligne de vue : aucun dégât à travers un obstacle **[RÉV. 4 — NOUVEAU]**
 Retour d'ElMehdi : on tire et on frappe à travers les murs et les maisons. **Règle : un dégât n'est infligé que s'il existe une ligne dégagée, sans aucun obstacle, entre l'attaquant et la cible.**
 - **S'applique à tout** : balles et flèches, plombs du fusil à pompe, coups de poing et de poignard, explosion de grenade (la ligne se mesure depuis le centre de l'explosion). **Pas** aux dégâts de zone.
-- **Ce qui bloque** (vue et dégâts) : murs pleins, couverts bas (étals, charrettes de souk, caisses empilées), **troncs d'arbres et de palmiers**, rochers. **Ce qui ne bloque pas** : les falaises (on voit et on tire par-dessus, décision déjà validée §7), l'eau, les buissons (**ils ne bloquent ni la vue ni les dégâts**, décision d'ElMehdi du 14 novembre ; voir §6 pour la discrétion de l'occupant), la fumée (elle bloque la vue, pas les balles : on peut tirer à l'aveugle). **[VALIDÉ]**
+- **Ce qui bloque** (vue et dégâts) : murs pleins, couverts bas (étals, charrettes de souk, caisses empilées), **troncs d'arbres et de palmiers**, rochers. **Ce qui ne bloque pas** : les falaises (on voit et on tire par-dessus, décision déjà validée §7), l'eau, les buissons (**ils ne bloquent ni la vue ni les dégâts**, décision d'ElMehdi du 14 novembre ; la discrétion de l'occupant est conservée, voir §6 ; validé le 15 novembre), la fumée (elle bloque la vue, pas les balles : on peut tirer à l'aveugle). **[VALIDÉ]**
 - **Ce qu'on voit bloque vraiment** : la forme dessinée comme un solide est exactement celle qui bloque (pas de forme invisible qui bloque, pas de forme visible qui laisse passer). Pour un arbre, le tronc dessiné bloque ; le feuillage est décoratif.
 - **Un seul calcul** : le même test « ligne dégagée » sert à **voir**, à **viser** (verrouillage) et à **blesser**.
 - **Balles par trajectoire continue** : à chaque pas, on teste tout le segment parcouru, pas seulement le point d'arrivée ; le tir part du centre du tireur (on teste aussi le segment centre → bouche de l'arme). Aucune balle ne saute un mur fin, même à 30 images/s.
@@ -307,13 +307,13 @@ Retour d'ElMehdi : on tire et on frappe à travers les murs et les maisons. **R�
 14. **[RÉV. 3] Sur 6 000²** : nom du quartier à l'entrée, départs répartis, décor par tuiles : **validés** (ARCHITECTURE.md mis à jour).
 
 15. **[RÉV. 4] Nombre de bots** : 22 bots (23 participants), Difficile par défaut, **décidé par ElMehdi** ; sélecteur de niveau dans le lobby **validé** (14 novembre).
-16. **[RÉV. 4] Dégâts +25 %** (valeurs arrondies dans le tableau §8) : **validé** par ElMehdi, sur le tableau v2.
+16. **[RÉV. 4] Dégâts +25 %** (valeurs arrondies dans le tableau §8) : **validé** par ElMehdi, sur le tableau v2 ; **reconfirmé le 18 novembre 2026 : +25 %, et non +30 %**.
 17. **[RÉV. 4] Auto-visée à 40 % de la portée** (60 % était proposé, 40 % choisi par ElMehdi) : distances 180 · 152 · 260 · 104 · 440 · 280 ; mêlée non concernée. **Validé** (14 novembre).
 18. **[RÉV. 4] Ligne de vue** : règle **validée**. Les buissons ne bloquent ni la vue ni les dégâts (**décision d'ElMehdi**) ; la fumée et les falaises ne bloquent pas les balles ; les troncs d'arbres bloquent.
 19. **[RÉV. 4] Butin par participant** : on garde **~250 emplacements** (≈ 11 par participant), **validé**.
-20. **[RÉV. 4 — VALIDÉ le 15 novembre 2026] Buissons et discrétion** : un buisson n'est jamais un obstacle (ni vue, ni dégâts, décidé le 14 novembre). La règle de discrétion de la rév. 2 (§6 : un joueur **dans** un buisson est invisible au-delà de 180 unités) est **conservée — décision d'ElMehdi du 15 novembre 2026** (« Yb9a mkhebbi f l-bush (180) »). Les buissons ne deviennent donc pas purement décoratifs.
+20. **[RÉV. 4] Buissons et discrétion** : **tranché par ElMehdi (2026-11-15)** : un buisson n'est jamais un obstacle (ni vue, ni dégâts) ; **la discrétion reste** : un joueur **dans** un buisson est invisible au-delà de 180 unités (mesurées de contour à contour), visible en dessous ; il reste blessable par un tir à la main.
 
-**Restent ouverts** : les points 3 (héros équilibrés ou non), 4 (lien public du jeu) et 6 (valeurs d'armes, relecture de Gemini). Le point 20 (buissons) est tranché depuis le 15 novembre 2026.
+**Restent ouverts** : les points 3 (héros équilibrés ou non), 4 (lien public du jeu) et 6 (valeurs d'armes, relecture de Gemini).
 
 ## 13. Hors du périmètre actuel
 
@@ -325,4 +325,4 @@ Pas de multijoueur, de comptes, de boutique, d'achats intégrés, de modes équi
 - Verrou de continuité : chaque scène commence exactement là où la précédente s'est terminée. Uniquement les dialogues français écrits, aucun dialogue ni personnage inventé.
 
 ---
-*v2 (révision 4) — validé par ElMehdi le 2026-11-14. Remplace la révision 3.*
+*v2 (révision 4) — validé par ElMehdi le 2026-11-14 ; point 20 (buissons) tranché le 2026-11-15. Remplace la révision 3.*

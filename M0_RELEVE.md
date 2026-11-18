@@ -118,7 +118,7 @@ Ces points sont des pistes. On ne corrige rien tant que la mesure n'a pas montr�
 
 - Il s'accroche au rythme d'affichage du navigateur (`requestAnimationFrame`) sans toucher au code du jeu.
 - Il affiche **une ligne en haut à droite**, en direct (images/s sur les 5 dernières secondes, pire image, nombre d'images au-dessus de 100 ms), et **4 petits boutons** : `S:` (change le nom du scénario), `RAZ` (remet à zéro), `RÉSUMÉ` (affiche le tableau pour la capture), `COPIER` (copie le résumé).
-- **Résumé** : images/s moyen, fréquence de l'écran, durées des images (médiane, p95, p99, pire), images au-dessus de 33 ms et de 100 ms (par minute), temps JS par image, pauses, contexte du jeu (état, vivants, balles, phase de zone, temps), taille d'écran, densité de pixels, navigateur, mémoire, et un contrôle indicatif des **seuils v2**.
+- **Résumé** : images/s moyen, fréquence de l'écran, durées des images (médiane, p95, p99, pire), images au-dessus de 33 ms et de 100 ms (par minute), temps JS par image, pauses, contexte du jeu (état, vivants, balles, phase de zone, temps), taille d'écran, densité de pixels, navigateur, mémoire, et un contrôle indicatif des **seuils v2**. **Depuis le 18 novembre : suivi des bots** (bots immobiles depuis 5 s, distance parcourue par bot), pour vérifier objectivement s'ils restent passifs.
 - **Options dans l'adresse** : `?rapide=1` accélère la zone ×4 pour tester la fin de partie (le résumé le signale) ; `?compte=1` compte les appels de dessin (légère surcharge : ne pas comparer les images/s de ce passage aux autres).
 
 **Interprétation proposée** (à confirmer par ElMehdi) : « pires images ≥ 24 images/s » = **les 1 % d'images les plus lentes** (p99 de la durée d'image ≤ 41,7 ms). La pire image isolée est suivie à part (règle des 100 ms). **« Quelques fois par minute » = 3 au maximum.** Le « JS ≤ 20 ms » mesure le temps de calcul du jeu, pas celui du processeur graphique.
@@ -130,9 +130,10 @@ Ces points sont des pistes. On ne corrige rien tant que la mesure n'a pas montr�
 2. Y copier l'`index.html` actuel, **sans le modifier**, sous le nom `legacy/index_v1.html` (référence, intouchable).
 3. Faire une 2e copie : `legacy/index_v1_mesure.html`. Y ajouter **une seule ligne**, juste après la ligne `<title>MarocBR Web Game</title>` :
    `<script src="perf-debug.js"></script>`
-4. Ajouter `perf-debug.js` dans `legacy/`.
+4. Ajouter `perf-debug.js` dans `legacy/` (**version du 18 novembre, avec le suivi des bots**).
 5. Publier, puis ouvrir la page de mesure sur un ordinateur : `<adresse du jeu>/legacy/index_v1_mesure.html`. Lancer une partie : la ligne de mesure doit s'afficher en haut à droite, et `RÉSUMÉ` doit montrer un tableau. **Le jeu lui-même doit se comporter comme avant.** Si ce n'est pas le cas, ne pas continuer, m'envoyer le problème.
 6. Le `index.html` de la racine **n'est pas modifié**.
+7. **Vérifier que la page hébergée sur muse.ai est bien la copie de mesure à jour** : même contenu que `legacy/index_v1_mesure.html` (v1 + la ligne `perf-debug.js`). La ligne de mesure doit maintenant se terminer par « bots fixes X/Y » dès 5 secondes de match.
 
 ### Préparation du Redmi (ElMehdi)
 - Batterie à plus de 50 %, **mode économie d'énergie désactivé** (il peut ramener l'écran de 120 à 60 Hz), luminosité moyenne, autres applis fermées, même Wi-Fi pour tous les passages.
@@ -163,5 +164,36 @@ Ces points sont des pistes. On ne corrige rien tant que la mesure n'a pas montr�
 - Le temps de calcul affiché est celui du **JavaScript**. Le coût du processeur graphique n'est pas mesuré, mais il se voit dans les images lentes.
 - L'outil lui-même a été **testé dans un faux navigateur** (calculs et affichage du résumé), **pas encore sur le vrai Redmi** : le premier passage de Muse sur ordinateur est la vérification.
 
+## 10. Première mesure (captures du 13 novembre) : indicative, M0 pas encore validé
+
+Source : 5 captures de la ligne de mesure en direct (pas les panneaux RÉSUMÉ). Partie gagnée : #1 sur 10, 6 éliminations, 2:20.
+
+| Moment du match | FPS (5 dernières secondes) | Pire image |
+|---|---|---|
+| ≈ 0:25 | 75 | 25 ms |
+| ≈ 0:40 | 67 | 41 ms |
+| ≈ 0:48 | 82 | 17 ms |
+| ≈ 1:03 | 75 | 25 ms |
+| écran de victoire (2:20) | 61 | 58 ms |
+
+Le compteur « >100ms » vaut **1** sur toutes les captures : un seul dépassement depuis la remise à zéro, qui n'a jamais augmenté.
+
+**Lecture** :
+- Partout très au-dessus de 30 images/s. Des valeurs au-dessus de 60 indiquent un écran à plus de 60 Hz (probablement 90 ou 120).
+- Les pires images (17 à 58 ms) sont des ralentissements ponctuels. Le pic de 58 ms coïncide avec l'apparition de l'écran de victoire (hypothèse).
+- **Rien d'alarmant**, mais **ce n'est pas la référence M0** : les conditions s'écartent du protocole.
+
+**Écarts avec le protocole (§8)** :
+1. Le jeu tournait en **portrait** (≈ 393 × 675 pixels CSS, estimation) et non en paysage.
+2. Il était affiché dans la page d'hébergement **muse.ai** (bandeau « Sign up » en haut), et non à l'adresse du jeu seule.
+3. Une **partie complète** a été jouée avec le label « stress » (le scénario demande 60 s au centre de la carte).
+4. **Aucun panneau RÉSUMÉ** : donc pas de p99, pas de temps JS par image, pas de contexte de jeu.
+5. En portrait, la ligne et les boutons de mesure **chevauchent les pastilles du HUD** (zone, temps).
+6. Un seul passage, pas de test de chauffe (batterie 65 % → 64 %).
+
+**Pour finir M0** : refaire les 4 scénarios **en paysage**, ouvrir `RÉSUMÉ` avant de quitter chaque scénario et envoyer les captures du tableau. Si l'hébergement muse.ai ne peut pas être évité, le noter dans le rapport.
+
+**Constat de jeu (hors performance)** : sur ces captures, le nombre de survivants, les éliminations et la santé du joueur ne bougent pas entre 0:25 et 1:03 : voir DECISIONS.md §5 (« jamais de bot immobile sans raison »).
+
 ---
-*M0 — relevé du 2026-11-13. Aucun code de jeu modifié. Fichiers : `M0_RELEVE.md`, `perf-debug.js`.*
+*M0 — relevé du 2026-11-13, première mesure ajoutée. Aucun code de jeu modifié. Fichiers : `M0_RELEVE.md`, `perf-debug.js`.*

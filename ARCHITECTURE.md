@@ -1,6 +1,6 @@
 # ARCHITECTURE.md — MarocBR v2
 
-**Statut : VALIDÉ par ElMehdi le 14 novembre 2026 (version 2, révision 4).** Remplace la révision 3 (validée le 13 novembre 2026). Mis à jour pour DECISIONS.md v2 révision 4 : 23 participants, ligne dégagée unique, balles par segment, navigation par les portes, anti-blocage des bots, verrouillage automatique à 40 % de la portée. Dépend de DECISIONS.md v2 révision 4.
+**Statut : VALIDÉ par ElMehdi le 14 novembre 2026 (version 2, révision 4) ; point 20 (buissons) tranché le 15 novembre 2026.** Remplace la révision 3 (validée le 13 novembre 2026). Mis à jour pour DECISIONS.md v2 révision 4 : 23 participants, ligne dégagée unique, balles par segment, navigation par les portes, anti-blocage des bots, verrouillage automatique à 40 % de la portée. Dépend de DECISIONS.md v2 révision 4.
 Ce document décrit **comment le code est organisé**, pas le jeu. Si les deux se contredisent, DECISIONS.md gagne.
 
 Public : ElMehdi (décisions), Muse (rangement des fichiers), Gemini et ChatGPT (relecture), Claude (seul à écrire le code).
@@ -82,7 +82,7 @@ Les modules sont rangés en couches. **Un module n'appelle que les couches en de
 | `core/zone.js` | Chronologie de la zone (DECISIONS §2), cercle actuel/prochain, dégâts en % des PV max (en continu, ils ignorent le gilet) | Ne sait pas où est le joueur : elle donne « ce point est-il dans la zone ? » |
 | `core/match.js` | États du match (attente, décompte, en cours, fini), rang, victoire, égalité | |
 | `world/collision.js` | Grille de collision, déplacements qui glissent le long des murs, **balles par segment parcouru** (jamais par simple point : aucun saut de mur fin) | |
-| `world/vision.js` | **Test « ligne dégagée » unique** (voir, viser et blesser : balles, mêlée, explosions). **Un buisson n'est jamais un obstacle** (ni vue, ni dégâts) ; seule la discrétion de l'occupant existe (180 unités de contour à contour, fondu — décision d'ElMehdi du 15 novembre 2026). Fumée | |
+| `world/vision.js` | **Test « ligne dégagée » unique** (voir, viser et blesser : balles, mêlée, explosions). **Un buisson n'est jamais un obstacle** (ni vue, ni dégâts) ; seule la discrétion de l'occupant existe (**validée le 15 novembre 2026** : invisible au-delà de 180 unités de contour à contour, fondu de 0,2 s). Fumée | |
 | `world/butin.js` | Placement du butin, ouverture des caisses et maisons, ramassage, **piles des éliminés** (tout le butin du mort, regroupé et réparti autour du corps) | Ne décide pas de la mort : reçoit l'événement `elimination` |
 | `world/bruit.js` | **Modèle unique du bruit** : qui émet quoi, qui entend quoi (section 8) | Ne joue aucun son |
 | `world/navigation.js` | **Grille de navigation grossière** (cellules d'environ 100 unités, ≈ 3 600 sur 6 000²), chemins calculés en plusieurs images, **passage par les portes**, détection de blocage (pas de progrès de plus de 20 unités en 2 s : nouveau chemin) | Ne dirige aucun bot (c'est `ai/cerveau`) |
@@ -205,7 +205,7 @@ Le jalon M8 est la porte d'entrée vers les cartes 2 et 3. Pas avant.
 ## 13. Tests
 
 - **Mode démo** : les 23 participants sont des bots, graine fixe, vitesse de simulation accélérée possible. Sert à mesurer le rythme de survie, la durée, la performance.
-- **Contrôles automatiques** (affichés à l'écran en mode debug) : aucun bot plus rapide que sa vitesse maximale ; chaque perte de vie a une cause ; chaque élimination à portée d'écoute produit un son ou une ligne dans le fil des éliminations ; zone toujours incluse dans la précédente ; **chaque élimination crée une pile contenant tout le butin du mort** (rien ne disparaît) ; **aucune porte bloquée** ; **aucun bot immobile plus de 5 s sans raison enregistrée** ; **zéro dégât avec un obstacle sur la trajectoire** (chaque dégât est revalidé après coup).
+- **Contrôles automatiques** (affichés à l'écran en mode debug) : aucun bot plus rapide que sa vitesse maximale ; chaque perte de vie a une cause ; chaque élimination à portée d'écoute produit un son ou une ligne dans le fil des éliminations ; zone toujours incluse dans la précédente ; **chaque élimination crée une pile contenant tout le butin du mort** (rien ne disparaît) ; **aucune porte bloquée** ; **aucun bot immobile plus de 5 s sans raison enregistrée** ; **zéro dégât avec un obstacle sur la trajectoire** (chaque dégât est revalidé après coup) ; **un occupant de buisson à plus de 180 unités n'est pas verrouillable mais reste blessable par un tir à la main**.
 - **Trois scénarios de performance**, répétés à chaque jalon : *stress*, *match complet*, *fin de match* ; plus le test de durée et, pour la Médina de 6 000², le scénario *traversée* (coin à coin en diagonale : mémoire et chargement des tuiles) (DECISIONS §10). Seuils : moyenne ≥ 30, pire ≥ 24 images/s, aucune image à plus de 100 ms plus de quelques fois par minute, cible de 20 ms ou moins par image.
 - **Format de rapport** : version, scénario, FPS moyen, pire image, ressenti, capture d'écran prise par ElMehdi sur son Redmi. À noter dans TACHES.md.
 
@@ -225,4 +225,4 @@ Le jalon M8 est la porte d'entrée vers les cartes 2 et 3. Pas avant.
 - **Version Unity** : les données (armes, surfaces, cartes, textes, profils de bots) et les règles (zone, bruit, hiérarchie des bots) se retraduisent presque telles quelles en C#.
 
 ---
-*ARCHITECTURE.md v2 (révision 4) — validé par ElMehdi le 2026-11-14. Remplace la révision 3.*
+*ARCHITECTURE.md v2 (révision 4) — validé par ElMehdi le 2026-11-14 ; point 20 (buissons) tranché le 2026-11-15. Remplace la révision 3.*

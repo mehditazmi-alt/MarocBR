@@ -4,6 +4,9 @@
    (Seule exception, et seulement si l'adresse contient ?rapide=1 : il
    accélère la zone x4 pour tester la fin de partie. Le résumé l'indique.)
 
+   Mise à jour du 18 novembre 2026 : suivi des BOTS (immobiles depuis 5 s, distance
+   parcourue par bot), lecture seule, pour vérifier s'ils restent passifs.
+
    Branchement : une seule ligne dans le <head> de la COPIE de mesure :
        <script src="perf-debug.js"></script>
    Options dans l'adresse :  ?rapide=1   zone accélérée x4
@@ -21,8 +24,46 @@
   var compte = /[?&]compte=1/.test(location.search);
   var calls = { total: 0, texte: 0 };
 
+  /* ---------- 0. suivi des bots (lecture seule) ---------- */
+  var botSt = null;
+  function nouvellesStatsBots() {
+    botSt = { hist: {}, last: {}, dist: {}, samples: 0, sumFixed: 0, sumElig: 0, maxFixed: 0, nowFixed: 0, nowElig: 0, na: false };
+  }
+  function echantillonBots() {            // appelé 1 fois par seconde
+    try {
+      var w = window, F = w.fighters;
+      if (!F || !F.length) return;
+      if (typeof w.state !== "undefined" && w.state !== "playing") return;
+      var pl = w.player;
+      if (pl === undefined && !(F[0] && F[0].isPlayer !== undefined)) { botSt.na = true; return; }
+      var i, f, h, d, key, elig = 0, fixes = 0;
+      for (i = 0; i < F.length; i++) {
+        f = F[i];
+        if (!f || f === pl || f.isPlayer || !f.alive) continue;
+        key = i;
+        if (botSt.last[key]) botSt.dist[key] = (botSt.dist[key] || 0) + Math.sqrt(Math.pow(f.x - botSt.last[key].x, 2) + Math.pow(f.y - botSt.last[key].y, 2));
+        else if (botSt.dist[key] === undefined) botSt.dist[key] = 0;
+        botSt.last[key] = { x: f.x, y: f.y };
+        h = botSt.hist[key] || (botSt.hist[key] = []);
+        h.push({ x: f.x, y: f.y });
+        if (h.length > 6) h.shift();
+        if (h.length === 6) {                // 5 secondes d'historique
+          elig++;
+          d = Math.sqrt(Math.pow(f.x - h[0].x, 2) + Math.pow(f.y - h[0].y, 2));
+          if (d < 20) fixes++;
+        }
+      }
+      botSt.nowFixed = fixes; botSt.nowElig = elig;
+      if (elig > 0) {
+        botSt.samples++; botSt.sumFixed += fixes; botSt.sumElig += elig;
+        if (fixes > botSt.maxFixed) botSt.maxFixed = fixes;
+      }
+    } catch (e) { /* jamais bloquer le jeu */ }
+  }
+
   /* ---------- 1. la mesure ---------- */
   function nouvelle() {
+    nouvellesStatsBots();
     S = {
       t0: performance.now(), last: null, n: 0,
       iv: new Float32Array(CAP), cost: new Float32Array(CAP),
@@ -77,7 +118,9 @@
     }
     if (!count) return "mesure en attente…";
     var fps = 1000 / (sum / count);
-    return "FPS " + Math.round(fps) + "  pire " + Math.round(worst) + " ms  >100ms: " + S.over100;
+    var txt = "FPS " + Math.round(fps) + "  pire " + Math.round(worst) + " ms  >100ms: " + S.over100;
+    if (botSt && botSt.nowElig) txt += "  bots fixes " + botSt.nowFixed + "/" + botSt.nowElig;
+    return txt;
   }
 
   /* ---------- 3. contexte du jeu (lu seulement) ---------- */
@@ -131,6 +174,16 @@
              Math.round((calls.texte - S.texteBase) / S.n) + " textes");
     }
     L.push("Jeu : " + contexteJeu());
+    if (botSt && botSt.samples) {
+      var ds = [], kk;
+      for (kk in botSt.dist) ds.push(Math.round(botSt.dist[kk]));
+      ds.sort(function (a, b) { return a - b; });
+      L.push("Bots immobiles (5 s) : maintenant " + botSt.nowFixed + "/" + botSt.nowElig +
+             " | en moyenne " + f1(100 * botSt.sumFixed / botSt.sumElig) + " % | pire " + botSt.maxFixed + " bot(s)");
+      L.push("Distance parcourue par bot (unités) : " + ds.join(" · "));
+    } else if (botSt && botSt.na) {
+      L.push("Bots : suivi indisponible (joueur non identifié)");
+    }
     L.push("Écran : " + innerWidth + "×" + innerHeight + " px CSS | DPR " + (window.devicePixelRatio || 1) +
            " | canevas " + (c ? c.width + "×" + c.height : "n/a"));
     L.push("Appareil : " + (navigator.hardwareConcurrency || "?") + " cœurs | RAM ≥ " + (navigator.deviceMemory || "?") +
@@ -143,6 +196,7 @@
 
   /* ---------- 5. branchement sur requestAnimationFrame ---------- */
   nouvelle();
+  setInterval(echantillonBots, 1000);
   var realRAF = window.requestAnimationFrame.bind(window);
   window.requestAnimationFrame = function (cb) {
     return realRAF(function (ts) {
@@ -224,5 +278,5 @@
   else demarrer();
 
   /* petite porte d'entrée pour les tests */
-  window.__perf = { record: record, resume: resume, reset: nouvelle };
+  window.__perf = { record: record, resume: resume, reset: nouvelle, bots: echantillonBots };
 })();
